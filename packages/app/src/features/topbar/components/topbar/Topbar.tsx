@@ -43,9 +43,10 @@ export function Topbar({
         <Link
           to="/"
           className={cn(
-            'group focus-visible:bg-primary focus-visible:text-neutral-950 focus-visible:ring',
+            'group flex flex-col items-center justify-center gap-1', // добавлено: flex-col, gap между img
+            'focus-visible:bg-primary focus-visible:text-neutral-950 focus-visible:ring',
             'focus-visible:outline-none focus-visible:ring-primary-200 focus-visible:ring-offset-0',
-            'flex h-14 w-10 shrink-0 items-center justify-center gap-2 sm:w-16',
+            'h-14 w-10 shrink-0 sm:w-16',
           )}
         >
           <img
@@ -53,7 +54,13 @@ export function Topbar({
             alt="Spark logo"
             className="aspect-square h-6 select-none brightness-0 transition duration-300 group-hover:filter-none group-focus-visible:filter-none sm:h-8 md:h-9"
           />
+          <img
+            src={assets.brand.cp0xLogo}
+            alt="cp0x logo"
+            className="aspect-square h-6 select-none brightness-0 transition duration-300 group-hover:filter-none group-focus-visible:filter-none sm:h-8 md:h-9"
+          />
         </Link>
+
         {isMobileDisplay && <TopbarNavigationDialog {...navigationInfo} />}
       </div>
 

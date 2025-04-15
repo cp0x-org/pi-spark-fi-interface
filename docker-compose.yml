@@ -1,0 +1,8 @@
+services:
+  pi-sparkfi:
+    image: cp0x/pi-sparkfi-interface:latest
+    container_name: pi-sparkfi-interface
+    restart: always
+    ports:
+      - "3002:4000"
+    tty: true
