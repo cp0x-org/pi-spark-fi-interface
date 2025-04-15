@@ -9,6 +9,7 @@
   "packageManager": "pnpm@9.14.2",
   "scripts": {
     "dev": "pnpm run --filter './packages/app' dev",
+    "prod": "pnpm run --filter './packages/app' production",
     "storybook": "pnpm run --filter './packages/app' storybook",
     "check": "biome check --config-path ./biome.strict.json .",
     "check:fix": "biome check --config-path ./biome.strict.json --write --unsafe .",

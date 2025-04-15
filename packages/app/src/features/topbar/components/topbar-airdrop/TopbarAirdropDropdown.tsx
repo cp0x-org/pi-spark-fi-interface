@@ -43,7 +43,7 @@ export function TopbarAirdropDropdown({
           data-testid={testIds.topbar.airdrop.badge}
           className="aspect-square [@media(min-width:1080px)]:aspect-auto"
         >
-          <img src={assets.brand.symbolGradient} className="icon-sm" />
+          <img src={assets.brand.logoDark} className="icon-sm" />
           <span className="hidden [@media(min-width:1080px)]:block">
             {isLoading ? (
               <Skeleton className="h-5 w-7 rounded-sm" />
@@ -58,7 +58,7 @@ export function TopbarAirdropDropdown({
         <DropdownMenuGroup className="py-2">
           <DropdownMenuLabel>Spark Airdrop Tokens</DropdownMenuLabel>
           <DropdownMenuItem className="pointer-events-none py-2">
-            <img src={assets.brand.symbolGradient} className="icon-md" />
+            <img src={assets.brand.logoDark} className="icon-md" />
             {isLoading ? (
               <Skeleton className="h-6 w-10 rounded-sm" />
             ) : (

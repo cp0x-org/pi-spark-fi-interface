@@ -70,7 +70,7 @@ function TopbarMenuAirdropDialog({
             <div className="flex flex-col items-start gap-2">
               <span className="typography-label-3 text-secondary">Spark Airdrop Tokens</span>
               <div className="flex items-center gap-2">
-                <img src={assets.brand.symbolGradient} alt="spark logo" className="icon-md" />
+                <img src={assets.brand.logoDark} alt="spark logo" className="icon-md" />
                 {SPK_MOCK_TOKEN.format(amount ?? NormalizedUnitNumber(0), { style: 'compact' })}
               </div>
             </div>
@@ -85,7 +85,7 @@ function TopbarMenuAirdropDialog({
         <MenuItem className="flex flex-col items-start gap-2 p-6">
           <span className="typography-label-3 text-secondary">Amount</span>
           <div className="flex items-center gap-2">
-            <img src={assets.brand.symbolGradient} className="icon-md" />
+            <img src={assets.brand.logoDark} className="icon-md" />
             {isLoading ? (
               <Skeleton className="h-6 w-10 rounded-sm" />
             ) : (

@@ -16,6 +16,7 @@ import logoGradientLight from './brand/logo-gradient-light.svg'
 import logoLight from './brand/logo-light.svg'
 import symbolDark from './brand/symbol-dark.svg'
 import symbolGradient from './brand/symbol-gradient.svg'
+import cp0xLogo from './brand/cp0x_logo.svg'
 import symboLight from './brand/symbol-light.svg'
 import arbitrum from './chains/arbitrum.svg'
 import base from './chains/base.svg'
@@ -258,6 +259,7 @@ export const assets = {
   },
 
   brand: {
+    cp0xLogo,
     symbolGradient,
     symbolDark,
     symboLight,

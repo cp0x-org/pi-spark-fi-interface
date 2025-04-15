@@ -76,22 +76,6 @@ export function TopbarMenu({
             </div>
           </MenuItem>
 
-          <MenuItem asChild variant="secondary" className="cursor-pointer rounded-none p-6" withSeparator>
-            <Link to={links.termsOfUse} variant="unstyled" external>
-              <MenuItemIcon icon={ScrollTextIcon} />
-              Terms of Service
-              <DropdownMenuItemIcon icon={ExternalLinkIcon} className="ml-auto" />
-            </Link>
-          </MenuItem>
-
-          <MenuItem asChild variant="secondary" className="cursor-pointer rounded-none p-6" withSeparator>
-            <Link to={links.privacyPolicy} variant="unstyled" external>
-              <MenuItemIcon icon={ShieldIcon} />
-              Privacy Policy
-              <DropdownMenuItemIcon icon={ExternalLinkIcon} className="ml-auto" />
-            </Link>
-          </MenuItem>
-
           <Link
             to={links.github}
             variant="unstyled"
@@ -127,22 +111,6 @@ export function TopbarMenu({
             Explore Spark with <br />
             unlimited tokens
           </div>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem asChild variant="secondary" className="cursor-pointer py-6">
-          <Link to={links.termsOfUse} variant="unstyled" external>
-            <DropdownMenuItemIcon icon={ScrollTextIcon} />
-            Terms of Service
-            <DropdownMenuItemIcon icon={ExternalLinkIcon} className="ml-auto" />
-          </Link>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem asChild variant="secondary" className="cursor-pointer py-6">
-          <Link to={links.privacyPolicy} variant="unstyled" external>
-            <DropdownMenuItemIcon icon={ShieldIcon} />
-            Privacy Policy
-            <DropdownMenuItemIcon icon={ExternalLinkIcon} className="ml-auto" />
-          </Link>
         </DropdownMenuItem>
 
         <Link
