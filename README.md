@@ -1,7 +1,15 @@
-# App
+# Permissionless Spark Interface by cp0x
 
-[![CI](https://github.com/sparkdotfi/app-public/actions/workflows/ci.yml/badge.svg)](https://github.com/sparkdotfi/app-public/actions/workflows/ci.yml)
-| [Production](https://app.spark.fi/)
+An open-source, permissionless interface for the Spark protocol, designed to be fully permissionless and enable direct, unrestricted interaction with smart contracts.
+
+## Application Links
+- Website: [pi.cp0x.com](https://pi.cp0x.com/)
+- Interface: [spark.cp0x.com](https://spark.cp0x.com)
+- Twitter: [@cp0xdotcom](https://x.com/cp0xdotcom)
+- Telegram: [@cp0xdotcom](https://t.me/cp0xdotcom)
+-
+
+# App
 
 ## Development
 
@@ -23,27 +31,6 @@ To enforce Vercel build to use exact pnpm version, add environment variable at V
 ```sh
 ENABLE_EXPERIMENTAL_COREPACK=1
 ```
-
-
-## Directory structure
-
-- `ui` folder should only contain reusable chunks of code responsible only for rendering, any data should be passed via
-  props. `atoms` consist from `radix-ui` primitives and html tags, `molecules` consist of `atoms`, `organisms` consist
-  of `molecules`. `layouts` defines general page layouts and screens.
-  [Atomic Design](https://bradfrost.com/blog/post/atomic-web-design/).
-
-- `domain` folder contains domain logic. Functions, hooks, types etc. It should contain all the business logic and data
-  fetching logic. If some chunks of code are reusable, consider putting it in the `common` subfolder.
-
-- `features` folder is the place where the code specific for a given feature (like easy borrow flow) should be placed.
-  It contains logic as well as pure feature specific visual components. It should export a single container (connected
-  component) that should wire logic with components. If the chunk of code is reusable (or is generic enough to be
-  reusable in the future), put it either in `ui` or `domain` following all the rules.
-
-- `config` folder contains only static (defined during compile time) objects that define the behaviour of the app.
-
-- `utils` folder contains reusable functions, hooks that are **not** domain specific. For domain specific stuff consider
-  `domain/common`. For strictly UI specific utils consider `ui/utils`.
 
 ## Feature flags
 
