@@ -7,7 +7,6 @@ An open-source, permissionless interface for the Spark protocol, designed to be 
 - Interface: [spark.cp0x.com](https://spark.cp0x.com)
 - Twitter: [@cp0xdotcom](https://x.com/cp0xdotcom)
 - Telegram: [@cp0xdotcom](https://t.me/cp0xdotcom)
--
 
 # App
 
