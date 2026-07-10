@@ -378,6 +378,7 @@ export interface SpkStakingData {
   pendingAmountRate: NormalizedUnitNumber
   pendingAmountTimestamp: number
   generalStats: GeneralStats
+  stakingMultiplier: NormalizedUnitNumber
   withdrawals: Withdrawal[]
   timestamp: UnixTime
   nextEpochEnd: UnixTime

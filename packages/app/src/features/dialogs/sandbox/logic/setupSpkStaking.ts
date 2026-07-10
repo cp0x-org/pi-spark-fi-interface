@@ -23,6 +23,7 @@ const DEFAULT_WALLET_DATA = {
 
 const DEFAULT_STATS_DATA = {
   tvl: '5630000',
+  total_staked: '5630000',
   number_of_wallets: 78,
   apr: '0.0473',
 }

@@ -132,7 +132,7 @@ const sky = defineToken({
 })
 
 const spk = defineToken({
-  address: CheckedAddress('0xf94473bf6ef648638a7b1eeef354fe440721ef41'), // @todo: add correct address
+  address: CheckedAddress('0xc20059e0317DE91738d13af027DfC4a50781b066'),
   oracleType: 'zero-price',
   symbol: TokenSymbol('SPK'),
 })

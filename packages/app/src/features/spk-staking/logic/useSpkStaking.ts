@@ -70,7 +70,7 @@ export function useSpkStaking(): UseSpkStakingResult {
         type: 'cta',
         props: {
           type: 'disconnected',
-          apy: spkStakingData.generalStats.apr,
+          stakingMultiplier: spkStakingData.stakingMultiplier,
           connectWallet: openConnectModal,
           tryInSandbox: openSandboxModal,
         },
@@ -86,7 +86,7 @@ export function useSpkStaking(): UseSpkStakingResult {
             openDialog(stakeDialogConfig, {})
           },
           spkBalance,
-          apy: spkStakingData.generalStats.apr,
+          stakingMultiplier: spkStakingData.stakingMultiplier,
         },
       } satisfies MainPanelData
     }
@@ -109,10 +109,10 @@ export function useSpkStaking(): UseSpkStakingResult {
     return {
       type: 'active',
       props: {
-        apy: spkStakingData.generalStats.apr,
+        stakingMultiplier: spkStakingData.stakingMultiplier,
         stakedAmount: spkStakingData.amountStaked,
-        rewardToken: tokenRepository.findOneTokenBySymbol(TokenSymbol('SPK')),
-        stakingToken: tokenRepository.findOneTokenBySymbol(TokenSymbol('USDS')),
+        rewardToken: tokenRepository.findOneTokenBySymbol(TokenSymbol('USDS')),
+        stakingToken: tokenRepository.findOneTokenBySymbol(TokenSymbol('SPK')),
         claimableRewards: spkStakingData.rewardsClaimableAmount,
         isRewardOutOfSync: spkStakingData.isOutOfSync,
         refreshGrowingRewardIntervalInMs,

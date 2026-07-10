@@ -32,6 +32,9 @@ export interface ChartProps {
   data: ChartDataPoint[]
   primaryColor: string
   lineColorClassName?: string
+  valueLabel?: string
+  formatTick?: (value: { valueOf(): number }) => string
+  formatTooltipValue?: (value: NormalizedUnitNumber) => string
 }
 
 function Chart({
@@ -47,6 +50,9 @@ function Chart({
   data: _data,
   primaryColor,
   lineColorClassName,
+  valueLabel = 'TVL',
+  formatTick = formatUSDTicks,
+  formatTooltipValue = (value) => USD_MOCK_TOKEN.formatUSD(value),
 }: ChartProps & WithTooltipProvidedProps<ChartDataPoint>) {
   const componentId = useId()
 
@@ -184,7 +190,7 @@ function Chart({
             scale={yValueScale}
             strokeWidth={0}
             numTicks={yAxisNumTicks}
-            tickFormat={formatUSDTicks}
+            tickFormat={formatTick}
             tickLabelProps={() => ({
               fill: colorsPreset.axisTickLabel,
               fontSize: 10,
@@ -252,7 +258,13 @@ function Chart({
 
       {tooltipData && (
         <TooltipWithBounds top={20} left={tooltipLeft + 40} unstyled applyPositionStyle className="pointer-events-none">
-          <TooltipContent data={tooltipData} primaryColor={primaryColor} lineColorClassName={lineColorClassName} />
+          <TooltipContent
+            data={tooltipData}
+            primaryColor={primaryColor}
+            lineColorClassName={lineColorClassName}
+            valueLabel={valueLabel}
+            formatTooltipValue={formatTooltipValue}
+          />
         </TooltipWithBounds>
       )}
     </div>
@@ -263,13 +275,23 @@ function TooltipContent({
   data,
   primaryColor,
   lineColorClassName,
-}: { data: ChartDataPoint; primaryColor: string; lineColorClassName?: string }) {
+  valueLabel,
+  formatTooltipValue,
+}: {
+  data: ChartDataPoint
+  primaryColor: string
+  lineColorClassName?: string
+  valueLabel: string
+  formatTooltipValue: (value: NormalizedUnitNumber) => string
+}) {
   const valueProps = lineColorClassName ? { dotClassName: lineColorClassName } : { dotColor: primaryColor }
 
   return (
     <ChartTooltipContent>
       <ChartTooltipContent.Date>{formatTooltipDate(data.date)}</ChartTooltipContent.Date>
-      <ChartTooltipContent.Value {...valueProps}>TVL: {USD_MOCK_TOKEN.formatUSD(data.tvl)}</ChartTooltipContent.Value>
+      <ChartTooltipContent.Value {...valueProps}>
+        {valueLabel}: {formatTooltipValue(data.tvl)}
+      </ChartTooltipContent.Value>
     </ChartTooltipContent>
   )
 }

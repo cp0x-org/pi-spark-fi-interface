@@ -1,6 +1,6 @@
 import { WithClassname } from '@sb/decorators'
 import { getMobileStory, getTabletStory } from '@sb/viewports'
-import { NormalizedUnitNumber, Percentage } from '@sparkdotfi/common-universal'
+import { NormalizedUnitNumber } from '@sparkdotfi/common-universal'
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 import { StakeSpkCTAPanel, StakeSpkCTAPanelProps } from './StakeSpkCTAPanel'
@@ -10,7 +10,7 @@ const meta: Meta<typeof StakeSpkCTAPanel> = {
   component: StakeSpkCTAPanel,
   decorators: [withRouter(), WithClassname('max-w-7xl grid lg:grid-cols-2')],
   args: {
-    apy: Percentage(0.12),
+    stakingMultiplier: NormalizedUnitNumber(3),
   },
 }
 export default meta

@@ -1,7 +1,7 @@
 import { WithClassname, WithTooltipProvider } from '@sb/decorators'
 import { tokens } from '@sb/tokens'
 import { getMobileStory, getTabletStory } from '@sb/viewports'
-import { NormalizedUnitNumber, Percentage } from '@sparkdotfi/common-universal'
+import { NormalizedUnitNumber } from '@sparkdotfi/common-universal'
 import type { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-remix-react-router'
 import { StakingRewardsPanel, StakingRewardsPanelProps } from './StakingRewardsPanel'
@@ -11,7 +11,7 @@ const meta: Meta<typeof StakingRewardsPanel> = {
   component: StakingRewardsPanel,
   decorators: [withRouter(), WithClassname('max-w-7xl grid lg:grid-cols-2'), WithTooltipProvider()],
   args: {
-    apy: Percentage(0.12),
+    stakingMultiplier: NormalizedUnitNumber(3),
     claimableRewards: NormalizedUnitNumber(25),
     stakedAmount: NormalizedUnitNumber(10_000),
     isRewardOutOfSync: false,

@@ -22,12 +22,13 @@ const meta: Meta<typeof SpkStakingView> = {
       apr: Percentage(0.05),
       stakers: 100,
       tvl: NormalizedUnitNumber(1000000),
+      totalStaked: NormalizedUnitNumber(628_900_000),
     },
     mainPanelData: {
       type: 'cta',
       props: {
         type: 'connected',
-        apy: Percentage(0.05),
+        stakingMultiplier: NormalizedUnitNumber(3),
         spkBalance: NormalizedUnitNumber(5000),
         stake: () => {},
       },
@@ -74,7 +75,7 @@ export const Active: Story = {
     mainPanelData: {
       type: 'active',
       props: {
-        apy: Percentage(0.05),
+        stakingMultiplier: NormalizedUnitNumber(3),
         stakedAmount: NormalizedUnitNumber(1000),
         rewardToken: tokens.USDS,
         stakingToken: tokens.SPK,
