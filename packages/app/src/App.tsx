@@ -2,6 +2,7 @@ import '@rainbow-me/rainbowkit/styles.css'
 
 import { RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { WagmiProvider } from 'wagmi'
 
@@ -18,6 +19,12 @@ import { TooltipProvider } from './ui/atoms/tooltip/Tooltip'
 function App() {
   const sandboxNetwork = useStore((state) => state.sandbox.network)
   const config = getConfig(sandboxNetwork)
+
+  useEffect(() => {
+    document.documentElement.classList.remove('dark')
+    document.documentElement.style.colorScheme = 'light'
+  }, [])
+
   if (import.meta.env.VITE_PLAYWRIGHT === '1') {
     // biome-ignore lint/correctness/useHookAtTopLevel: <explanation>
     useAutoConnect({ config })
