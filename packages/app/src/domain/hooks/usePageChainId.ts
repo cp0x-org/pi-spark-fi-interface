@@ -48,4 +48,5 @@ const pageNamesMap: Record<Path, string> = {
   sparkRewards: 'Rewards',
   spkStaking: 'SPK Staking',
   spkFarm: 'SPK Farm',
+  spkGovernance: 'SPK Governance',
 }

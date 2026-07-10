@@ -13,6 +13,7 @@ import { RootRoute } from './pages/Root'
 import { Savings } from './pages/Savings'
 import { SparkRewards } from './pages/SparkRewards'
 import { SpkFarm } from './pages/SpkFarm'
+import { SpkGovernance } from './pages/SpkGovernance'
 import { SpkStaking } from './pages/SpkStaking'
 import { Swap } from './pages/Swap'
 
@@ -63,6 +64,7 @@ export const rootRouter = createBrowserRouter([
             ? [
                 { path: paths.spkStaking, element: <SpkStaking /> },
                 { path: paths.spkFarm, element: <SpkFarm /> },
+                { path: paths.spkGovernance, element: <SpkGovernance /> },
               ]
             : []),
           ...createAliasRoutes([

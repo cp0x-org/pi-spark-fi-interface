@@ -24,6 +24,7 @@ export function SwapView({
   setAmount,
   selectFromToken,
   selectToToken,
+  setMaxAmount,
   switchTokens,
   openConnectModal,
   handleSwapSuccess,
@@ -51,9 +52,10 @@ export function SwapView({
             selectorAssets={fromAssetOptions}
             amount={amount}
             error={amountExceedsBalance ? 'Exceeds your balance' : undefined}
-            showBalance
+            maxAsset={fromAsset}
             onAmountChange={setAmount}
             onTokenChange={selectFromToken}
+            onMaxClick={setMaxAmount}
           />
 
           <button
@@ -71,8 +73,10 @@ export function SwapView({
           selectedAsset={toAsset}
           selectorAssets={toAssetOptions}
           amount={outcomeAmount}
+          maxAsset={{ token: toAsset.token, balance: fromAsset.balance }}
           disabled
           onTokenChange={selectToToken}
+          onMaxClick={setMaxAmount}
         />
 
         {showActions ? (

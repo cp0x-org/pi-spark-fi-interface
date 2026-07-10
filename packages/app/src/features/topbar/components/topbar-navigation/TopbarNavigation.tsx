@@ -49,6 +49,7 @@ export function TopbarNavigation({
   const sparkTokenSubLinks = [
     { to: paths.spkStaking, label: 'Staking' },
     { to: paths.spkFarm, label: 'Farm' },
+    { to: paths.spkGovernance, label: 'Governance' },
   ]
 
   return (

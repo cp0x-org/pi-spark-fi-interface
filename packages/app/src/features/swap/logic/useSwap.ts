@@ -1,4 +1,5 @@
 import { getChainConfigEntry } from '@/config/chain'
+import { formFormat } from '@/domain/common/format'
 import { TokenWithBalance } from '@/domain/common/types'
 import { usePageChainId } from '@/domain/hooks/usePageChainId'
 import { useTokenRepositoryForFeature } from '@/domain/token-repository/useTokenRepositoryForFeature'
@@ -32,6 +33,7 @@ export interface UseSwapResult {
   setAmount: (value: string) => void
   selectFromToken: (symbol: TokenSymbol) => void
   selectToToken: (symbol: TokenSymbol) => void
+  setMaxAmount: () => void
   switchTokens: () => void
   openConnectModal: () => void
   handleSwapSuccess: () => void
@@ -98,6 +100,10 @@ export function useSwap(): UseSwapResult {
     setToTokenSymbol(symbol)
   }
 
+  function setMaxAmount(): void {
+    setAmountState(formFormat(fromAsset.balance, fromAsset.token.decimals))
+  }
+
   function switchTokens(): void {
     setFromTokenSymbol(effectiveToTokenSymbol)
     setToTokenSymbol(effectiveFromTokenSymbol)
@@ -131,6 +137,7 @@ export function useSwap(): UseSwapResult {
     setAmount,
     selectFromToken,
     selectToToken,
+    setMaxAmount,
     switchTokens,
     openConnectModal,
     handleSwapSuccess: () => setAmountState(''),

@@ -25,6 +25,7 @@ export function TopbarNavigationDialog({
   const sparkTokenSubLinks = [
     { to: paths.spkStaking, label: 'Staking' },
     { to: paths.spkFarm, label: 'Farm' },
+    { to: paths.spkGovernance, label: 'Governance' },
   ]
 
   function closeDialog() {

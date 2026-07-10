@@ -35,7 +35,7 @@ export function useNavigationInfo({ chainId }: UseNavigationInfoParams): TopbarN
     },
   ]
 
-  const sparkTokenSubLinks = [paths.spkStaking, paths.spkFarm]
+  const sparkTokenSubLinks = [paths.spkStaking, paths.spkFarm, paths.spkGovernance]
 
   const location = useLocation()
   const isBorrowSubLinkActive = borrowSubLinks.some((link) => matchPath(`${link.to}/*`, location.pathname))

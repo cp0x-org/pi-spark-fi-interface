@@ -12,10 +12,11 @@ export interface SwapAssetPanelProps {
   selectorAssets: TokenWithBalance[]
   amount: string
   error?: string
-  showBalance?: boolean
+  maxAsset: TokenWithBalance
   disabled?: boolean
   onAmountChange?: (value: string) => void
   onTokenChange: (symbol: TokenSymbol) => void
+  onMaxClick: () => void
   className?: string
 }
 
@@ -25,10 +26,11 @@ export function SwapAssetPanel({
   selectorAssets,
   amount,
   error,
-  showBalance = false,
+  maxAsset,
   disabled = false,
   onAmountChange,
   onTokenChange,
+  onMaxClick,
   className,
 }: SwapAssetPanelProps) {
   function handleChange(e: ChangeEvent<HTMLInputElement>): void {
@@ -40,8 +42,7 @@ export function SwapAssetPanel({
       <div className="text-[18px] leading-6 font-medium tracking-normal text-primary">{label}</div>
       <div
         className={cn(
-          'mt-4 grid min-h-[68px] grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-sm border border-primary bg-secondary p-2 pr-4',
-          showBalance && 'grid-cols-[auto_minmax(0,1fr)_auto]',
+          'mt-4 grid min-h-[68px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-sm border border-primary bg-secondary p-2 pr-4',
           error && 'border-[#ff4f5b] bg-[#ffe2e2]',
         )}
       >
@@ -65,14 +66,21 @@ export function SwapAssetPanel({
           autoComplete="off"
         />
 
-        {showBalance && (
-          <div className="flex shrink-0 items-center gap-1 text-[14px] leading-5 font-medium tracking-normal text-secondary">
-            <WalletCardsIcon className="h-3.5 w-3.5" />
+        <div className="flex shrink-0 flex-col items-end gap-0.5">
+          <button
+            type="button"
+            onClick={onMaxClick}
+            className="text-[14px] leading-5 font-medium tracking-normal text-brand-primary transition-colors hover:text-primary-950 focus-visible:outline-none focus-visible:ring focus-visible:ring-primary-200"
+          >
+            MAX
+          </button>
+          <div className="flex items-center gap-1 text-[12px] leading-[18px] font-medium tracking-normal text-secondary">
+            <WalletCardsIcon className="h-3.5 w-3.5 shrink-0" />
             <span>
-              {formatTokenBalance(selectedAsset.token, selectedAsset.balance)} {selectedAsset.token.symbol}
+              {formatTokenBalance(maxAsset.token, maxAsset.balance)} {maxAsset.token.symbol}
             </span>
           </div>
-        )}
+        </div>
       </div>
       {error && <div className="mt-2 text-[14px] leading-5 font-medium tracking-normal text-[#d91838]">{error}</div>}
     </section>
