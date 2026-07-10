@@ -1,5 +1,4 @@
 import { Path, paths } from '@/config/paths'
-import { formatPercentage } from '@/domain/common/format'
 import { SavingsAPYBadge } from '@/features/savings/components/navbar-item/SavingsAPYBadge'
 import { SavingsConverterQueryResults } from '@/features/topbar/types'
 import {
@@ -9,7 +8,6 @@ import {
   DropdownMenuTrigger,
 } from '@/ui/atoms/dropdown/DropdownMenu'
 import { cn } from '@/ui/utils/style'
-import { Percentage } from '@sparkdotfi/common-universal'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
@@ -24,7 +22,6 @@ export interface TopbarNavigationInfo {
 
 export interface TopbarNavigationProps {
   savingsConverter: SavingsConverterQueryResults | undefined
-  spkStakingApy: Percentage | undefined
   blockedPages: Path[]
   borrowSubLinks: {
     to: string
@@ -36,7 +33,6 @@ export interface TopbarNavigationProps {
 
 export function TopbarNavigation({
   savingsConverter,
-  spkStakingApy,
   blockedPages,
   borrowSubLinks,
   isBorrowSubLinkActive,
@@ -138,13 +134,7 @@ export function TopbarNavigation({
               <NavLink to={paths.spkStaking} onClick={handleNavigate}>
                 {({ isActive }) => (
                   <SparkTokenNavLinkContent isActive={isActive}>
-                    <div className="flex flex-col gap-2">
-                      <div className="typography-label-2 text-primary">Staking</div>
-                      <div className="typography-body-4 text-secondary">Deposit SPK and earn USDS rewards.</div>
-                    </div>
-                    <div className="typography-label-3 rounded-full bg-gradient-spark-primary-2 px-1.5 py-0.5 text-primary-inverse">
-                      {formatPercentage(spkStakingApy)}
-                    </div>
+                    <div className="typography-label-2 text-primary">Staking</div>
                   </SparkTokenNavLinkContent>
                 )}
               </NavLink>

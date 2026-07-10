@@ -1,5 +1,4 @@
 import { paths } from '@/config/paths'
-import { formatPercentage } from '@/domain/common/format'
 import { SavingsAPYBadge } from '@/features/savings/components/navbar-item/SavingsAPYBadge'
 import { assets } from '@/ui/assets'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/ui/atoms/accordion/Accordion'
@@ -17,7 +16,6 @@ import { LINKS_DATA } from './constants'
 
 export function TopbarNavigationDialog({
   savingsConverter,
-  spkStakingApy,
   blockedPages,
   borrowSubLinks,
   isBorrowSubLinkActive,
@@ -116,9 +114,6 @@ export function TopbarNavigationDialog({
                     >
                       <SparkTokenNavLinkContent isActive={isActive}>
                         <div className="typography-label-2 text-primary">Staking</div>
-                        <div className="typography-label-3 rounded-full bg-gradient-spark-primary-2 px-1.5 py-0.5 text-primary-inverse">
-                          {formatPercentage(spkStakingApy)}
-                        </div>
                       </SparkTokenNavLinkContent>
                     </MenuItem>
                   )}

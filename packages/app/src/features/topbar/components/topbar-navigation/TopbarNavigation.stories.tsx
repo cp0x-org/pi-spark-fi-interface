@@ -23,7 +23,6 @@ const args = {
   ],
   isBorrowSubLinkActive: false,
   isSparkTokenSubLinkActive: false,
-  spkStakingApy: Percentage(0.173),
   blockedPages: [],
   savingsConverter: {
     data: {
@@ -125,7 +124,7 @@ export const SparkTokenDropdownOpenPage: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement.ownerDocument.body)
-    const button = await canvas.findByRole('button', { name: /SPK Token/i })
+    const button = await canvas.findByRole('button', { name: /^SPK$/i })
 
     await userEvent.click(button)
   },
