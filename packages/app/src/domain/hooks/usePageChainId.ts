@@ -42,6 +42,7 @@ const pageNamesMap: Record<Path, string> = {
   markets: 'Markets',
   marketDetails: 'Market',
   savings: 'Savings',
+  swap: 'Swap',
   farms: 'Farms',
   farmDetails: 'Farm',
   sparkRewards: 'Rewards',

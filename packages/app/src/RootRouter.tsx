@@ -14,6 +14,7 @@ import { Savings } from './pages/Savings'
 import { SparkRewards } from './pages/SparkRewards'
 import { SpkFarm } from './pages/SpkFarm'
 import { SpkStaking } from './pages/SpkStaking'
+import { Swap } from './pages/Swap'
 
 export const rootRouter = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ export const rootRouter = createBrowserRouter([
           {
             path: paths.savings,
             element: <Savings />,
+          },
+          {
+            path: paths.swap,
+            element: <Swap />,
           },
           {
             path: paths.markets,

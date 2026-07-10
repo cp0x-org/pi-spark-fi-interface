@@ -8,6 +8,11 @@ const pageGradients = {
     via: '#40DA69',
     to: '#FFFFFF',
   },
+  swap: {
+    from: '#FA43BD',
+    via: '#FFB5B5',
+    to: '#FFFFFF',
+  },
   farms: {
     from: '#FA43BD',
     via: '#FFB5B5',

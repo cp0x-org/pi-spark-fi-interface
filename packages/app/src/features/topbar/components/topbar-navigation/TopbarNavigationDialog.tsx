@@ -128,6 +128,19 @@ export function TopbarNavigationDialog({
             </AccordionItem>
           </Accordion>
         )}
+
+        <div className="border-primary border-t" />
+
+        {!blockedPages.some((page) => page === 'swap') && (
+          <TopbarButton
+            to={paths.swap}
+            label={LINKS_DATA.swap.label}
+            prefixIcon={LINKS_DATA.swap.icon}
+            type="swap"
+            className="w-full"
+            onClick={closeDialog}
+          />
+        )}
       </DialogContent>
     </Dialog>
   )

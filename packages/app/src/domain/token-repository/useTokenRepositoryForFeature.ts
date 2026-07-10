@@ -30,6 +30,8 @@ export function useTokenRepositoryForFeature(
         return chainConfig.markets
       case 'savings':
         return chainConfig.savings
+      case 'swap':
+        return chainConfig.savings
       case 'farms':
         return chainConfig.farms
       case 'sparkRewards':
