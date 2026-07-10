@@ -10,6 +10,7 @@ export const paths = {
   farmDetails: '/farms/:chainId/:address',
   sparkRewards: '/rewards',
   spkStaking: '/spk/staking',
+  spkFarm: '/spk/farm',
 } as const
 
 export type Path = keyof typeof paths
@@ -19,7 +20,7 @@ export const pathGroups = {
   savings: ['savings'],
   farms: ['farms', 'farmDetails'],
   sparkRewards: ['sparkRewards'],
-  sparkToken: ['spkStaking'],
+  sparkToken: ['spkStaking', 'spkFarm'],
 } satisfies Record<'borrow' | 'savings' | 'farms' | 'sparkRewards' | 'sparkToken', Path[]>
 
 export type PathGroup = keyof typeof pathGroups

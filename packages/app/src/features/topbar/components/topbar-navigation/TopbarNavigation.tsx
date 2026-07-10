@@ -46,6 +46,11 @@ export function TopbarNavigation({
     setSparkTokenDropdownOpen(false)
   }
 
+  const sparkTokenSubLinks = [
+    { to: paths.spkStaking, label: 'Staking' },
+    { to: paths.spkFarm, label: 'Farm' },
+  ]
+
   return (
     <div className="hidden gap-2 sm:flex">
       {!blockedPages.some((page) => page === 'savings') && ( // some instead of includes for better type inference
@@ -126,19 +131,21 @@ export function TopbarNavigation({
           </DropdownMenuTrigger>
 
           <DropdownMenuContent className="w-72 shadow-2xl" align="start">
-            <DropdownMenuItem
-              key={paths.spkStaking}
-              asChild
-              className="cursor-pointer rounded-none border-b border-b-primary p-0 first:rounded-t-xs last:rounded-b-xs last:border-none"
-            >
-              <NavLink to={paths.spkStaking} onClick={handleNavigate}>
-                {({ isActive }) => (
-                  <SparkTokenNavLinkContent isActive={isActive}>
-                    <div className="typography-label-2 text-primary">Staking</div>
-                  </SparkTokenNavLinkContent>
-                )}
-              </NavLink>
-            </DropdownMenuItem>
+            {sparkTokenSubLinks.map((link) => (
+              <DropdownMenuItem
+                key={link.to}
+                asChild
+                className="cursor-pointer rounded-none border-b border-b-primary p-0 first:rounded-t-xs last:rounded-b-xs last:border-none"
+              >
+                <NavLink to={link.to} onClick={handleNavigate}>
+                  {({ isActive }) => (
+                    <SparkTokenNavLinkContent isActive={isActive}>
+                      <div className="typography-label-2 text-primary">{link.label}</div>
+                    </SparkTokenNavLinkContent>
+                  )}
+                </NavLink>
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
       )}

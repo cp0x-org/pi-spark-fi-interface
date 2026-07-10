@@ -23,6 +23,7 @@ export interface FarmBlockchainDetails {
   totalSupply: NormalizedUnitNumber
   earned: NormalizedUnitNumber
   staked: NormalizedUnitNumber
+  hiddenFromList?: boolean
 }
 
 export type Farm = Partial<FarmApiDetails> & FarmBlockchainDetails

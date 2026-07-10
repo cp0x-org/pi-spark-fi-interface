@@ -27,6 +27,7 @@ export const farmStablecoinsEntryGroup: Record<1 | 8453, AssetsGroup> = {
 export const farmAddresses = {
   [mainnet.id]: {
     chroniclePoints: CheckedAddress('0x10ab606B067C9C461d8893c47C7512472E19e2Ce'),
+    spkUsds: CheckedAddress('0x173e314C7635B45322cd8Cb14f44b312e079F3af'),
     skyUsds: CheckedAddress('0x0650CAF159C5A49f711e8169D4336ECB9b950275'),
   },
   [base.id]: {

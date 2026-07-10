@@ -22,6 +22,10 @@ export function TopbarNavigationDialog({
   isSparkTokenSubLinkActive,
 }: TopbarNavigationProps) {
   const [dialogOpen, setDialogOpen] = useState(false)
+  const sparkTokenSubLinks = [
+    { to: paths.spkStaking, label: 'Staking' },
+    { to: paths.spkFarm, label: 'Farm' },
+  ]
 
   function closeDialog() {
     setDialogOpen(false)
@@ -106,18 +110,20 @@ export function TopbarNavigationDialog({
                 />
               </AccordionTrigger>
               <AccordionContent className="flex flex-col gap-2 px-12">
-                <NavLink to={paths.spkStaking}>
-                  {({ isActive }) => (
-                    <MenuItem
-                      onClick={closeDialog}
-                      className="overflow-hidden border border-primary p-0 text-secondary"
-                    >
-                      <SparkTokenNavLinkContent isActive={isActive}>
-                        <div className="typography-label-2 text-primary">Staking</div>
-                      </SparkTokenNavLinkContent>
-                    </MenuItem>
-                  )}
-                </NavLink>
+                {sparkTokenSubLinks.map((link) => (
+                  <NavLink key={link.to} to={link.to}>
+                    {({ isActive }) => (
+                      <MenuItem
+                        onClick={closeDialog}
+                        className="overflow-hidden border border-primary p-0 text-secondary"
+                      >
+                        <SparkTokenNavLinkContent isActive={isActive}>
+                          <div className="typography-label-2 text-primary">{link.label}</div>
+                        </SparkTokenNavLinkContent>
+                      </MenuItem>
+                    )}
+                  </NavLink>
+                ))}
               </AccordionContent>
             </AccordionItem>
           </Accordion>

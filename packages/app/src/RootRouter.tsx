@@ -12,6 +12,7 @@ import { MyPortfolioPage } from './pages/MyPortfolio'
 import { RootRoute } from './pages/Root'
 import { Savings } from './pages/Savings'
 import { SparkRewards } from './pages/SparkRewards'
+import { SpkFarm } from './pages/SpkFarm'
 import { SpkStaking } from './pages/SpkStaking'
 
 export const rootRouter = createBrowserRouter([
@@ -54,7 +55,10 @@ export const rootRouter = createBrowserRouter([
             ? [{ path: paths.sparkRewards, element: <SparkRewards /> }]
             : []),
           ...(import.meta.env.VITE_DEV_SPARK_TOKEN === '1'
-            ? [{ path: paths.spkStaking, element: <SpkStaking /> }]
+            ? [
+                { path: paths.spkStaking, element: <SpkStaking /> },
+                { path: paths.spkFarm, element: <SpkFarm /> },
+              ]
             : []),
           ...createAliasRoutes([
             {

@@ -91,12 +91,12 @@ export interface SavingsConfig {
 export type AssetsGroup =
   | {
       type: 'stablecoins'
-      name: 'Stablecoins'
+      name: string
       assets: TokenSymbol[]
     }
   | {
       type: 'governance'
-      name: 'Governance Tokens'
+      name: string
       assets: TokenSymbol[]
     }
 
@@ -104,6 +104,7 @@ export type FarmConfig = {
   address: CheckedAddress
   entryAssetsGroup: AssetsGroup
   historyCutoff?: Date
+  hiddenFromList?: boolean
 } & (
   | {
       rewardType: 'token'

@@ -13,8 +13,14 @@ export function useFarms(): UseFarmsResult {
   const { chainId } = usePageChainId()
   const { farmsInfo } = useFarmsInfo({ chainId })
 
-  const activeFarms = farmsInfo.getActiveFarms().map((farm) => getFarmTileProps({ farm, chainId }))
-  const inactiveFarms = farmsInfo.getInactiveFarms().map((farm) => getFarmTileProps({ farm, chainId }))
+  const activeFarms = farmsInfo
+    .getActiveFarms()
+    .filter((farm) => !farm.hiddenFromList)
+    .map((farm) => getFarmTileProps({ farm, chainId }))
+  const inactiveFarms = farmsInfo
+    .getInactiveFarms()
+    .filter((farm) => !farm.hiddenFromList)
+    .map((farm) => getFarmTileProps({ farm, chainId }))
 
   return {
     activeFarms,

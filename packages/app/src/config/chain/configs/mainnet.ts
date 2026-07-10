@@ -135,7 +135,7 @@ const spk = defineToken({
   address: CheckedAddress('0xc20059e0317DE91738d13af027DfC4a50781b066'),
   oracleType: 'farm-reward-price',
   // @note: USDS -> SPK farm, its api data contains the SPK price
-  farmAddress: CheckedAddress('0x173e314C7635B45322cd8Cb14f44b312e079F3af'),
+  farmAddress: farmAddresses[mainnet.id].spkUsds,
   symbol: TokenSymbol('SPK'),
 })
 
@@ -327,6 +327,17 @@ export const mainnetConfig: ChainConfigEntry = {
   },
   farms: {
     configs: [
+      {
+        rewardType: 'token',
+        address: farmAddresses[mainnet.id].spkUsds,
+        entryAssetsGroup: {
+          type: 'stablecoins',
+          name: 'USDS',
+          assets: [usds.symbol],
+        },
+        rewardToken: spk.symbol,
+        hiddenFromList: true,
+      },
       {
         rewardType: 'token',
         address: farmAddresses[mainnet.id].skyUsds,
