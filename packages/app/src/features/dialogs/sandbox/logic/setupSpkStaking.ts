@@ -1,4 +1,4 @@
-import { infoSkyApiUrl, spark2ApiUrl } from '@/config/consts'
+import { spark2ApiUrl } from '@/config/consts'
 import { testSpkStakingAddress, testStakingRewardsAbi, testStakingRewardsAddress } from '@/config/contracts-generated'
 import { getContractAddress } from '@/domain/hooks/useContractAddress'
 import { CheckedAddress, Hash, Hex, UnixTime } from '@sparkdotfi/common-universal'
@@ -78,10 +78,11 @@ export async function setupSpkStaking({
   }
 
   msw.use(
-    http.get(`${spark2ApiUrl}/spk-staking/${sandboxChainId}/${merkleRoot}/${account}/`, () => {
+    // @note: query params (?season=...) are ignored by msw when matching
+    http.get(`${spark2ApiUrl}/spk-staking/${account}/`, () => {
       return HttpResponse.json(currentConfig.walletData)
     }),
-    http.get(`${infoSkyApiUrl}/spk-staking/stats/`, () => {
+    http.get(`${spark2ApiUrl}/spk-staking/stats/`, () => {
       return HttpResponse.json(currentConfig.statsData)
     }),
   )
@@ -103,13 +104,10 @@ export function updateEndpoints(msw: SetupWorker, newConfig: RecursivePartial<Sp
   currentConfig = mergeDeep(currentConfig, newConfig) as SpkStakingEndpointsConfig
 
   msw.resetHandlers(
-    http.get(
-      `${spark2ApiUrl}/spk-staking/${currentConfig.sandboxChainId}/${currentConfig.walletData.merkle_root}/${currentConfig.account}/`,
-      () => {
-        return HttpResponse.json(currentConfig.walletData)
-      },
-    ),
-    http.get(`${infoSkyApiUrl}/spk-staking/stats/`, () => {
+    http.get(`${spark2ApiUrl}/spk-staking/${currentConfig.account}/`, () => {
+      return HttpResponse.json(currentConfig.walletData)
+    }),
+    http.get(`${spark2ApiUrl}/spk-staking/stats/`, () => {
       return HttpResponse.json(currentConfig.statsData)
     }),
   )

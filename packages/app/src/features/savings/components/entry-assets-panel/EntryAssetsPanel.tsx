@@ -1,4 +1,5 @@
 import { Token } from '@/domain/types/Token'
+import { TokenSymbol } from '@/domain/types/TokenSymbol'
 import { assets as uiAssets } from '@/ui/assets'
 import { Button } from '@/ui/atoms/button/Button'
 import { Panel } from '@/ui/atoms/panel/Panel'
@@ -57,10 +58,14 @@ export function EntryAssetsPanel({
     [openDepositDialog],
   )
 
+  const heading = assets.some(({ token }) => token.symbol === TokenSymbol('WETH'))
+    ? 'Supported tokens'
+    : 'Supported stablecoins'
+
   return (
     <Panel spacing="none">
       <div className={cn('flex flex-col gap-6 p-4 md:px-8 md:py-6', showConvertDialogButton && 'pb-0 md:pb-0')}>
-        <h3 className="typography-heading-4 text-primary">Supported stablecoins</h3>
+        <h3 className="typography-heading-4 text-primary">{heading}</h3>
         <DataTable
           gridTemplateColumnsClassName="grid-cols-[repeat(2,_1fr)_120px] sm:grid-cols-[repeat(2,_1fr)_140px]"
           data={assets}

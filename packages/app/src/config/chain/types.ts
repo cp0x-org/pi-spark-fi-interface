@@ -80,6 +80,7 @@ export interface AccountConfig {
   fetchConverterQuery: (args: SavingsConverterQueryParams) => SavingsConverterQueryOptions
   savingsRateQueryOptions: SavingsRateQueryOptions | undefined
   myEarningsQueryOptions: MyEarningsQueryOptions | undefined
+  isLegacy?: boolean
 }
 
 export interface SavingsConfig {
@@ -144,17 +145,24 @@ export interface ChainConfigEntry {
 export type ChainConfig = Record<SupportedChainId, ChainConfigEntry>
 
 // @note: zero-price oracle is used for tokens for which we don't have a price feed yet
-export type OracleType = 'fixed-usd' | 'vault' | 'zero-price' | 'ssr-auth-oracle'
+export type OracleType = 'fixed-usd' | 'vault' | 'zero-price' | 'ssr-auth-oracle' | 'chainlink-usd'
 
 export type TokenConfig = { symbol: TokenSymbol } & (
   | {
       address: CheckedAddress
-      oracleType: Exclude<OracleType, 'vault'>
+      oracleType: Exclude<OracleType, 'vault' | 'chainlink-usd'>
     }
   | {
       address: CheckedAddress
       oracleType: 'vault'
       sharesDecimals?: number
       assetsDecimals?: number
+      // @note: chainlink USD feed for the vault underlying asset; without it the underlying is assumed to be worth $1
+      underlyingPriceFeed?: CheckedAddress
+    }
+  | {
+      address: CheckedAddress
+      oracleType: 'chainlink-usd'
+      priceFeed: CheckedAddress
     }
 )

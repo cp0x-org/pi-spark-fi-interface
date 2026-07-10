@@ -63,6 +63,7 @@ export interface ShortAccountDefinition {
   savingsToken: Token
   underlyingToken: Token
   underlyingTokenDeposit: NormalizedUnitNumber
+  isLegacy: boolean
 }
 export interface UseSavingsResults {
   allAccounts: ShortAccountDefinition[]
@@ -139,7 +140,9 @@ export function useSavings(): UseSavingsResults {
     .map(({ underlyingToken, savingsToken, converter }) => {
       const savingsTokenBalance = tokenRepository.findOneBalanceBySymbol(savingsToken.symbol)
       const underlyingTokenDeposit = converter.convertToAssets({ shares: savingsTokenBalance })
-      return { savingsToken, underlyingToken, underlyingTokenDeposit }
+      const isLegacy =
+        savings?.accounts?.find((account) => account.savingsToken === savingsToken.symbol)?.isLegacy ?? false
+      return { savingsToken, underlyingToken, underlyingTokenDeposit, isLegacy }
     })
 
   const interestData = getInterestData({
@@ -201,7 +204,11 @@ export function useSavings(): UseSavingsResults {
       mostValuableAsset: maxBalanceToken,
       showConvertDialogButton: Boolean(psmStables && psmStables.length > 1),
       migrationInfo,
-      metadata: getAccountMetadata({ underlyingToken: selectedAccountData.underlyingToken.symbol, chainId }),
+      metadata: getAccountMetadata({
+        underlyingToken: selectedAccountData.underlyingToken.symbol,
+        savingsToken: selectedAccountData.savingsToken.symbol,
+        chainId,
+      }),
       sparkRewardsSummary,
     },
   }

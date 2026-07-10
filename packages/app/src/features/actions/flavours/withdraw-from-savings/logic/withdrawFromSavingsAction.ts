@@ -1,3 +1,4 @@
+import { sparkVaultAbi } from '@/config/abis/sparkVaultAbi'
 import { SPARK_UI_REFERRAL_CODE_BIGINT } from '@/config/consts'
 import {
   migrationActionsConfig,
@@ -51,6 +52,14 @@ export function createWithdrawFromSavingsActionConfig(
         : toBigInt(token.toBaseUnit(action.amount))
 
       switch (actionPath) {
+        case 'spark-vault-to-asset':
+          return ensureConfigTypes({
+            address: savingsToken.address,
+            abi: sparkVaultAbi,
+            functionName: isRedeem ? 'redeem' : 'withdraw',
+            args: [argsAmount, receiver, account],
+          })
+
         case 'susds-to-usds':
         case 'sdai-to-dai':
           return ensureConfigTypes({
@@ -249,6 +258,7 @@ export function createWithdrawFromSavingsActionConfig(
       }
 
       switch (actionPath) {
+        case 'spark-vault-to-asset':
         case 'sdai-to-dai':
         case 'susds-to-usds':
         case 'susdc-to-usdc':

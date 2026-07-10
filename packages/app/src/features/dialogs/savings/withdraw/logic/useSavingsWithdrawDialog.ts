@@ -1,4 +1,5 @@
 import { getChainConfigEntry } from '@/config/chain'
+import { findSparkVaultBySavingsTokenSymbol } from '@/config/chain/constants'
 import { TokenWithBalance, TokenWithValue } from '@/domain/common/types'
 import { useConditionalFreeze } from '@/domain/hooks/useConditionalFreeze'
 import { useSavingsAccountRepository } from '@/domain/savings/useSavingsAccountRepository'
@@ -159,6 +160,10 @@ function filterInputTokens({
   tokenRepository,
 }: FilterInputTokensParams): TokenWithBalance[] {
   if (savingsToken.symbol === TokenSymbol('sDAI')) {
+    return inputTokens
+  }
+
+  if (findSparkVaultBySavingsTokenSymbol(savingsToken.symbol)) {
     return inputTokens
   }
 

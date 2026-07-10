@@ -20,6 +20,7 @@ import {
   mainnetSavingsUsdcConverterQuery,
   mainnetSavingsUsdsConverterQuery,
 } from '@/domain/savings-converters/mainnetSavingsConverter'
+import { sparkVaultConverterQueryFactory } from '@/domain/savings-converters/sparkVaultConverter'
 import { Token } from '@/domain/types/Token'
 import { TokenSymbol } from '@/domain/types/TokenSymbol'
 import { assets } from '@/ui/assets'
@@ -28,7 +29,7 @@ import { mainnet } from 'viem/chains'
 import { infoSkyApiUrl } from '../../consts'
 import { usdcVaultAddress } from '../../contracts-generated'
 import { commonTokenSymbolToReplacedName } from '../common'
-import { farmAddresses, farmStablecoinsEntryGroup, susdsAddresses } from '../constants'
+import { farmAddresses, farmStablecoinsEntryGroup, sparkVaults, susdsAddresses } from '../constants'
 import { USDC_ACCOUNT_ENABLED } from '../flags'
 import { ChainConfigEntry } from '../types'
 import { defineToken } from '../utils/defineToken'
@@ -68,6 +69,60 @@ const susdc = defineToken({
   oracleType: 'vault',
   assetsDecimals: 6,
   symbol: TokenSymbol('sUSDC'),
+})
+
+const usdt = defineToken({
+  address: CheckedAddress('0xdAC17F958D2ee523a2206206994597C13D831ec7'),
+  oracleType: 'fixed-usd',
+  symbol: TokenSymbol('USDT'),
+})
+
+const pyusd = defineToken({
+  address: CheckedAddress('0x6c3ea9036406852006290770BEdFcAbA0e23A0e8'),
+  oracleType: 'fixed-usd',
+  symbol: TokenSymbol('PYUSD'),
+})
+
+const chainlinkEthUsdFeed = CheckedAddress('0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419')
+
+const weth = defineToken({
+  address: CheckedAddress('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'),
+  oracleType: 'chainlink-usd',
+  priceFeed: chainlinkEthUsdFeed,
+  symbol: TokenSymbol('WETH'),
+})
+
+const [spusdcVault, spusdtVault, sppyusdVault, spethVault] = sparkVaults[mainnet.id]
+
+const spusdc = defineToken({
+  address: spusdcVault!.address,
+  oracleType: 'vault',
+  sharesDecimals: 6,
+  assetsDecimals: 6,
+  symbol: TokenSymbol('spUSDC'),
+})
+
+const spusdt = defineToken({
+  address: spusdtVault!.address,
+  oracleType: 'vault',
+  sharesDecimals: 6,
+  assetsDecimals: 6,
+  symbol: TokenSymbol('spUSDT'),
+})
+
+const sppyusd = defineToken({
+  address: sppyusdVault!.address,
+  oracleType: 'vault',
+  sharesDecimals: 6,
+  assetsDecimals: 6,
+  symbol: TokenSymbol('spPYUSD'),
+})
+
+const speth = defineToken({
+  address: spethVault!.address,
+  oracleType: 'vault',
+  underlyingPriceFeed: chainlinkEthUsdFeed,
+  symbol: TokenSymbol('spETH'),
 })
 
 const sky = defineToken({
@@ -202,18 +257,22 @@ export const mainnetConfig: ChainConfigEntry = {
   },
   savings: {
     accounts: [
-      ...(USDC_ACCOUNT_ENABLED
-        ? [
-            {
-              savingsToken: susdc.symbol,
-              underlyingToken: usdc.symbol,
-              supportedStablecoins: [usdc.symbol],
-              fetchConverterQuery: mainnetSavingsUsdcConverterQuery,
-              savingsRateQueryOptions: mainnetSusdcSavingsRateQueryOptions,
-              myEarningsQueryOptions: mainnetSusdcMyEarningsQueryOptions,
-            },
-          ]
-        : []),
+      {
+        savingsToken: spusdc.symbol,
+        underlyingToken: usdc.symbol,
+        supportedStablecoins: [usdc.symbol],
+        fetchConverterQuery: sparkVaultConverterQueryFactory(spusdc.symbol),
+        savingsRateQueryOptions: undefined,
+        myEarningsQueryOptions: undefined,
+      },
+      {
+        savingsToken: spusdt.symbol,
+        underlyingToken: usdt.symbol,
+        supportedStablecoins: [usdt.symbol],
+        fetchConverterQuery: sparkVaultConverterQueryFactory(spusdt.symbol),
+        savingsRateQueryOptions: undefined,
+        myEarningsQueryOptions: undefined,
+      },
       {
         savingsToken: susds.symbol,
         underlyingToken: usds.symbol,
@@ -223,12 +282,43 @@ export const mainnetConfig: ChainConfigEntry = {
         myEarningsQueryOptions: mainnetSusdsMyEarningsQueryOptions,
       },
       {
+        savingsToken: sppyusd.symbol,
+        underlyingToken: pyusd.symbol,
+        supportedStablecoins: [pyusd.symbol],
+        fetchConverterQuery: sparkVaultConverterQueryFactory(sppyusd.symbol),
+        savingsRateQueryOptions: undefined,
+        myEarningsQueryOptions: undefined,
+      },
+      {
+        savingsToken: speth.symbol,
+        underlyingToken: weth.symbol,
+        supportedStablecoins: [weth.symbol],
+        fetchConverterQuery: sparkVaultConverterQueryFactory(speth.symbol),
+        savingsRateQueryOptions: undefined,
+        myEarningsQueryOptions: undefined,
+      },
+      // @note: legacy accounts, kept at the bottom of the accounts navigation
+      ...(USDC_ACCOUNT_ENABLED
+        ? [
+            {
+              savingsToken: susdc.symbol,
+              underlyingToken: usdc.symbol,
+              supportedStablecoins: [usdc.symbol],
+              fetchConverterQuery: mainnetSavingsUsdcConverterQuery,
+              savingsRateQueryOptions: mainnetSusdcSavingsRateQueryOptions,
+              myEarningsQueryOptions: mainnetSusdcMyEarningsQueryOptions,
+              isLegacy: true,
+            },
+          ]
+        : []),
+      {
         savingsToken: sdai.symbol,
         underlyingToken: dai.symbol,
         supportedStablecoins: [dai.symbol, usdc.symbol],
         fetchConverterQuery: mainnetSavingsDaiConverterQuery,
         savingsRateQueryOptions: mainnetSdaiSavingsRateQueryOptions,
         myEarningsQueryOptions: mainnetSdaiMyEarningsQueryOptions,
+        isLegacy: true,
       },
     ],
     psmStables: [dai.symbol, usdc.symbol, usds.symbol],
@@ -267,5 +357,5 @@ export const mainnetConfig: ChainConfigEntry = {
     spkSymbol: spk.symbol,
     usdsSymbol: usds.symbol,
   },
-  definedTokens: [dai, usdc, usds, susds, sdai, susdc, sky, spk],
+  definedTokens: [dai, usdc, usdt, pyusd, weth, usds, susds, sdai, susdc, spusdc, spusdt, sppyusd, speth, sky, spk],
 }

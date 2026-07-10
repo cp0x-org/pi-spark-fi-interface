@@ -1,4 +1,4 @@
-import { infoSkyApiUrl, spark2ApiUrl } from '@/config/consts'
+import { spark2ApiUrl, sparkDataApiUrl } from '@/config/consts'
 import {
   testSpkStakingAbi,
   testSpkStakingAddress,
@@ -10,7 +10,14 @@ import { getContractAddress } from '@/domain/hooks/useContractAddress'
 import { TokenRepository } from '@/domain/token-repository/TokenRepository'
 import { TokenSymbol } from '@/domain/types/TokenSymbol'
 import { SuspenseQueryWith } from '@/utils/types'
-import { BaseUnitNumber, CheckedAddress, Hex, NormalizedUnitNumber, UnixTime } from '@sparkdotfi/common-universal'
+import {
+  BaseUnitNumber,
+  CheckedAddress,
+  Hex,
+  NormalizedUnitNumber,
+  Percentage,
+  UnixTime,
+} from '@sparkdotfi/common-universal'
 import { QueryKey, queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { range } from 'remeda'
 import { Address } from 'viem'
@@ -90,7 +97,7 @@ export function spkStakingDataQueryOptions({
           chainId,
         })
 
-        const res = await fetch(`${spark2ApiUrl}/spk-staking/${chainId}/${merkleRoot}/${account}/`)
+        const res = await fetch(`${spark2ApiUrl}/spk-staking/${account}/?season=3`)
         if (!res.ok) {
           throw new Error('Failed to fetch rewards')
         }
@@ -205,7 +212,7 @@ export function spkStakingDataQueryOptions({
       }
 
       async function fetchGeneralStats(): Promise<GeneralStats> {
-        const response = await fetch(`${infoSkyApiUrl}/spk-staking/stats/`)
+        const response = await fetch(`${spark2ApiUrl}/spk-staking/stats/`)
         if (!response.ok) {
           throw new Error('Error fetching SPK staking stats')
         }
@@ -214,8 +221,24 @@ export function spkStakingDataQueryOptions({
 
         return {
           tvl: parsedResult.tvl,
+          totalStaked: parsedResult.totalStaked,
           stakers: parsedResult.stakers,
           apr: parsedResult.apr,
+        }
+      }
+
+      async function fetchStakingMultiplier(): Promise<NormalizedUnitNumber> {
+        try {
+          const response = await fetch(`${sparkDataApiUrl}/points/actions/?season=${SPARK_POINTS_SEASON}`)
+          if (!response.ok) {
+            return DEFAULT_STAKING_MULTIPLIER
+          }
+          const result = pointsActionsResponseSchema.parse(await response.json())
+          const stakingAction = result.data.find((action) => action.action_key === 'staking')
+
+          return stakingAction?.amount ?? DEFAULT_STAKING_MULTIPLIER
+        } catch {
+          return DEFAULT_STAKING_MULTIPLIER
         }
       }
 
@@ -226,6 +249,7 @@ export function spkStakingDataQueryOptions({
         { withdrawals, nextEpochEnd },
         timestamp,
         generalStats,
+        stakingMultiplier,
       ] = await Promise.all([
         fetchAmountStaked(),
         fetchPreclaimedRewards(),
@@ -233,11 +257,14 @@ export function spkStakingDataQueryOptions({
         fetchVaultData(),
         fetchTimestamp(),
         fetchGeneralStats(),
+        fetchStakingMultiplier(),
       ])
 
-      const pendingAmount = NormalizedUnitNumber(walletRewardsData.pending_amount_normalized.minus(preclaimedRewards))
+      const pendingAmountRaw = walletRewardsData.pending_amount_normalized.minus(preclaimedRewards)
+      const pendingAmount = NormalizedUnitNumber(pendingAmountRaw.isNegative() ? 0 : pendingAmountRaw)
+      const rewardsClaimableAmountRaw = walletRewardsData.cumulative_amount_normalized.minus(preclaimedRewards)
       const rewardsClaimableAmount = NormalizedUnitNumber(
-        walletRewardsData.cumulative_amount_normalized.minus(preclaimedRewards),
+        rewardsClaimableAmountRaw.isNegative() ? 0 : rewardsClaimableAmountRaw,
       )
 
       return {
@@ -247,6 +274,7 @@ export function spkStakingDataQueryOptions({
         pendingAmountTimestamp: walletRewardsData.timestamp,
         withdrawals,
         generalStats,
+        stakingMultiplier,
         timestamp,
         nextEpochEnd,
         rewardsEpoch: walletRewardsData.epoch,
@@ -276,27 +304,62 @@ export function spkStakingDataQueryKey({ account, chainId }: SpkStakingDataQuery
   return ['spk-staking', 'spkStakingData', chainId, account]
 }
 
-const baDataResponseSchema = z.object({
-  amount_staked: normalizedUnitNumberSchema,
-  pending_amount_normalized: normalizedUnitNumberSchema,
-  pending_amount_rate: normalizedUnitNumberSchema,
-  cumulative_amount_normalized: normalizedUnitNumberSchema,
-  timestamp: z.number(),
-  epoch: z.number(),
-  proof: z.array(hexSchema),
-})
+// @note: supports two response shapes:
+// - the current spark2-api season response: slashable_balance_normalized, points_normalized,
+//   points_per_second_normalized, timestamp_updated (no merkle claim data)
+// - the legacy shape (still served by sandbox mocks): amount_staked, pending_amount_normalized,
+//   pending_amount_rate, cumulative_amount_normalized, timestamp, epoch, proof
+const baDataResponseSchema = z
+  .object({
+    slashable_balance_normalized: normalizedUnitNumberSchema.optional(),
+    points_normalized: normalizedUnitNumberSchema.optional(),
+    points_per_second_normalized: normalizedUnitNumberSchema.optional(),
+    timestamp_updated: z.number().optional(),
+    amount_staked: normalizedUnitNumberSchema.optional(),
+    pending_amount_normalized: normalizedUnitNumberSchema.optional(),
+    pending_amount_rate: normalizedUnitNumberSchema.optional(),
+    cumulative_amount_normalized: normalizedUnitNumberSchema.optional(),
+    timestamp: z.number().optional(),
+    epoch: z.number().optional(),
+    proof: z.array(hexSchema).optional(),
+  })
+  .transform((o) => ({
+    amount_staked: o.amount_staked ?? o.slashable_balance_normalized ?? NormalizedUnitNumber(0),
+    pending_amount_normalized: o.pending_amount_normalized ?? o.points_normalized ?? NormalizedUnitNumber(0),
+    pending_amount_rate: o.pending_amount_rate ?? o.points_per_second_normalized ?? NormalizedUnitNumber(0),
+    cumulative_amount_normalized: o.cumulative_amount_normalized ?? NormalizedUnitNumber(0),
+    timestamp: o.timestamp ?? o.timestamp_updated ?? 0,
+    epoch: o.epoch ?? 0,
+    proof: o.proof ?? [],
+  }))
 
 const generalStatsResponseSchema = z
   .object({
     tvl: normalizedUnitNumberSchema,
+    total_staked: normalizedUnitNumberSchema.optional(),
     number_of_wallets: z.number(),
-    apr: percentageSchema,
+    // @note: spark2-api stats endpoint does not always return apr
+    apr: percentageSchema.optional(),
   })
   .transform((o) => ({
     tvl: o.tvl,
+    totalStaked: o.total_staked ?? NormalizedUnitNumber(0),
     stakers: o.number_of_wallets,
-    apr: o.apr,
+    apr: o.apr ?? Percentage(0),
   }))
+
+export const SPARK_POINTS_SEASON = 4
+const DEFAULT_STAKING_MULTIPLIER = NormalizedUnitNumber(3)
+
+const pointsActionsResponseSchema = z.object({
+  data: z.array(
+    z.object({
+      action_key: z.string(),
+      amount: normalizedUnitNumberSchema,
+      rate_unit: z.string(),
+    }),
+  ),
+})
 
 export interface Withdrawal {
   epochs: bigint[]

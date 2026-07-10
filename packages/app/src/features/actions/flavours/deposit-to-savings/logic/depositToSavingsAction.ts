@@ -1,3 +1,4 @@
+import { sparkVaultAbi } from '@/config/abis/sparkVaultAbi'
 import { susdsAbi } from '@/config/abis/susdsAbi'
 import { SPARK_UI_REFERRAL_CODE, SPARK_UI_REFERRAL_CODE_BIGINT } from '@/config/consts'
 import {
@@ -48,6 +49,14 @@ export function createDepositToSavingsActionConfig(
       const assetsAmount = toBigInt(token.toBaseUnit(action.value))
 
       switch (actionPath) {
+        case 'asset-to-spark-vault':
+          return ensureConfigTypes({
+            address: savingsToken.address,
+            abi: sparkVaultAbi,
+            functionName: 'deposit',
+            args: [assetsAmount, account, SPARK_UI_REFERRAL_CODE],
+          })
+
         case 'usds-to-susds':
           return ensureConfigTypes({
             address: savingsToken.address,
@@ -215,6 +224,7 @@ export function createDepositToSavingsActionConfig(
             balancesQueryKeyPrefix,
             getAllowanceQueryKey(getContractAddress(migrationActionsConfig.address, chainId)),
           ]
+        case 'asset-to-spark-vault':
         case 'dai-to-sdai':
         case 'usds-to-susds':
         case 'usdc-to-susdc':

@@ -134,6 +134,7 @@ const shortSavingsUsdsAccountDefinition = {
   savingsToken: tokens.sUSDS,
   underlyingToken: tokens.USDS,
   underlyingTokenDeposit: NormalizedUnitNumber(10_365.7654),
+  isLegacy: false,
 } satisfies ShortAccountDefinition
 
 const savingsUsdcAccountDefinition = {
@@ -169,6 +170,7 @@ const shortSavingsUsdcAccountDefinition = {
   savingsToken: tokens.sUSDC,
   underlyingToken: tokens.USDC,
   underlyingTokenDeposit: NormalizedUnitNumber(10_365.7654),
+  isLegacy: true,
 } satisfies ShortAccountDefinition
 
 const savingsDaiAccountDefinition = {
@@ -218,6 +220,7 @@ const shortSavingsDaiAccountDefinition = {
   savingsToken: tokens.sDAI,
   underlyingToken: tokens.DAI,
   underlyingTokenDeposit: NormalizedUnitNumber(22_245.43),
+  isLegacy: true,
 } satisfies ShortAccountDefinition
 
 const savingsViewSusdsArgs = {

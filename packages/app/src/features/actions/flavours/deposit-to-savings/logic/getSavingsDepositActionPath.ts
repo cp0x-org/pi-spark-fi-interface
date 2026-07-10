@@ -1,3 +1,4 @@
+import { isSparkVaultPair } from '@/config/chain/constants'
 import { TokenRepository } from '@/domain/token-repository/TokenRepository'
 import { Token } from '@/domain/types/Token'
 import { TokenSymbol } from '@/domain/types/TokenSymbol'
@@ -5,6 +6,7 @@ import { raise } from '@sparkdotfi/common-universal'
 import { arbitrum, base, gnosis } from 'viem/chains'
 
 export type SavingsDepositActionPath =
+  | 'asset-to-spark-vault'
   | 'usds-to-susds'
   | 'dai-to-susds'
   | 'usdc-to-susds'
@@ -38,6 +40,10 @@ export function getSavingsDepositActionPath({
   const sdai = tokenRepository.sDAI?.symbol
   const susds = tokenRepository.sUSDS?.symbol
   const susdc = TokenSymbol('sUSDC')
+
+  if (isSparkVaultPair({ tokenSymbol: token.symbol, savingsTokenSymbol: savingsToken.symbol })) {
+    return 'asset-to-spark-vault'
+  }
 
   if (token.symbol === dai && savingsToken.symbol === sdai && chainId === gnosis.id) {
     return 'sexy-dai-to-sdai'

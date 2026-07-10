@@ -1,4 +1,4 @@
-import { infoSkyApiUrl, spark2ApiUrl } from '@/config/consts'
+import { spark2ApiUrl } from '@/config/consts'
 import {
   testSpkStakingAbi,
   testSpkStakingAddress,
@@ -38,7 +38,7 @@ describe(useSpkStaking.name, () => {
 
   test('returns the chainId', async () => {
     vi.stubGlobal('fetch', async (...args: Parameters<typeof fetch>) => {
-      if (args[0] === `${infoSkyApiUrl}/spk-staking/stats/`) {
+      if (args[0] === `${spark2ApiUrl}/spk-staking/stats/`) {
         return Promise.resolve({
           ok: true,
           json: () =>
@@ -50,7 +50,7 @@ describe(useSpkStaking.name, () => {
         })
       }
 
-      if (args[0] === `${spark2ApiUrl}/spk-staking/${chainId}/${merkleRoot}/${account}/`) {
+      if (args[0] === `${spark2ApiUrl}/spk-staking/${account}/?season=3`) {
         return Promise.resolve({
           ok: true,
           json: () =>
