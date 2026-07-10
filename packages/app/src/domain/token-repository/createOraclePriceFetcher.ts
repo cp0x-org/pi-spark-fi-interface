@@ -1,4 +1,5 @@
 import { TokenConfig } from '@/config/chain/types'
+import { infoSkyApiUrl } from '@/config/consts'
 import { ssrAuthOracleConfig } from '@/config/contracts-generated'
 import { getContractAddress } from '@/domain/hooks/useContractAddress'
 import { fromRay } from '@/utils/math'
@@ -7,6 +8,7 @@ import { CheckedAddress, NormalizedUnitNumber, assertNever } from '@sparkdotfi/c
 import { erc4626Abi, formatUnits, parseUnits } from 'viem'
 import { Config } from 'wagmi'
 import { readContract } from 'wagmi/actions'
+import { z } from 'zod'
 
 export interface CreateOraclePriceFetcherParams {
   tokenConfig: TokenConfig
@@ -51,6 +53,21 @@ export function createOraclePriceFetcher({
 
     case 'chainlink-usd':
       return () => fetchChainlinkUsdPrice({ wagmiConfig, chainId, priceFeed: tokenConfig.priceFeed })
+
+    case 'farm-reward-price':
+      return async () => {
+        try {
+          const response = await fetch(`${infoSkyApiUrl}/farms/${tokenConfig.farmAddress.toLowerCase()}/`)
+          if (!response.ok) {
+            return NormalizedUnitNumber(0)
+          }
+          const result = z.object({ price: z.string() }).parse(await response.json())
+
+          return NormalizedUnitNumber(result.price)
+        } catch {
+          return NormalizedUnitNumber(0)
+        }
+      }
 
     case 'ssr-auth-oracle':
       return async () => {

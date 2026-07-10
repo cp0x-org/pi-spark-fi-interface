@@ -145,12 +145,18 @@ export interface ChainConfigEntry {
 export type ChainConfig = Record<SupportedChainId, ChainConfigEntry>
 
 // @note: zero-price oracle is used for tokens for which we don't have a price feed yet
-export type OracleType = 'fixed-usd' | 'vault' | 'zero-price' | 'ssr-auth-oracle' | 'chainlink-usd'
+export type OracleType =
+  | 'fixed-usd'
+  | 'vault'
+  | 'zero-price'
+  | 'ssr-auth-oracle'
+  | 'chainlink-usd'
+  | 'farm-reward-price'
 
 export type TokenConfig = { symbol: TokenSymbol } & (
   | {
       address: CheckedAddress
-      oracleType: Exclude<OracleType, 'vault' | 'chainlink-usd'>
+      oracleType: Exclude<OracleType, 'vault' | 'chainlink-usd' | 'farm-reward-price'>
     }
   | {
       address: CheckedAddress
@@ -164,5 +170,11 @@ export type TokenConfig = { symbol: TokenSymbol } & (
       address: CheckedAddress
       oracleType: 'chainlink-usd'
       priceFeed: CheckedAddress
+    }
+  | {
+      // @note: price of a farm reward token taken from the info-sky farms api
+      address: CheckedAddress
+      oracleType: 'farm-reward-price'
+      farmAddress: CheckedAddress
     }
 )

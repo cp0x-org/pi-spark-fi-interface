@@ -97,7 +97,7 @@ export function spkStakingDataQueryOptions({
           chainId,
         })
 
-        const res = await fetch(`${spark2ApiUrl}/spk-staking/${account}/?season=3`)
+        const res = await fetch(`${spark2ApiUrl}/spk-staking/${account}/?season=${SPARK_POINTS_SEASON}`)
         if (!res.ok) {
           throw new Error('Failed to fetch rewards')
         }

@@ -51,7 +51,7 @@ describe(useSpkStaking.name, () => {
         })
       }
 
-      if (args[0] === `${spark2ApiUrl}/spk-staking/${account}/?season=3`) {
+      if (args[0] === `${spark2ApiUrl}/spk-staking/${account}/?season=4`) {
         return Promise.resolve({
           ok: true,
           json: () =>
