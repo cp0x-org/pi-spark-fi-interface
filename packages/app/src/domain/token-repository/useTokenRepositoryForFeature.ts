@@ -2,6 +2,7 @@ import { getChainConfigEntry } from '@/config/chain'
 import { TokenConfig } from '@/config/chain/types'
 import { pathGroups } from '@/config/paths'
 import { assertNever } from '@sparkdotfi/common-universal'
+import { Address } from 'viem'
 import { useChainId } from 'wagmi'
 import { TokenRepository } from './TokenRepository'
 import { useTokenRepository } from './useTokenRepository'
@@ -9,6 +10,7 @@ import { useTokenRepository } from './useTokenRepository'
 export interface UseTokenRepositoryForFeatureParams {
   chainId?: number
   featureGroup: keyof typeof pathGroups
+  account?: Address
 }
 
 export interface UseTokenRepositoryForFeatureResult {
@@ -19,7 +21,7 @@ export function useTokenRepositoryForFeature(
   params: UseTokenRepositoryForFeatureParams,
 ): UseTokenRepositoryForFeatureResult {
   const _chainId = useChainId()
-  const { featureGroup, chainId = _chainId } = params
+  const { featureGroup, chainId = _chainId, account } = params
 
   const chainConfig = getChainConfigEntry(chainId)
   const featureConfig = (() => {
@@ -45,7 +47,7 @@ export function useTokenRepositoryForFeature(
       })
     : []
 
-  return useTokenRepository({ chainId, tokenConfigs })
+  return useTokenRepository({ chainId, tokenConfigs, account })
 }
 
 interface ExtractTokensFromConfigParams {

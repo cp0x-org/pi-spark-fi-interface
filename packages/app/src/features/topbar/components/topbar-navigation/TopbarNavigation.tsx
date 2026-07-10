@@ -149,8 +149,6 @@ export function TopbarNavigation({
           </DropdownMenuContent>
         </DropdownMenu>
       )}
-
-      <TopbarButton to={paths.farms} type="farms" label={LINKS_DATA.farms.label} prefixIcon={LINKS_DATA.farms.icon} />
     </div>
   )
 }

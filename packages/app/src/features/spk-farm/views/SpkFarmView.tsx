@@ -7,8 +7,9 @@ import { ApyChart } from '@/ui/charts/apy-chart/ApyChart'
 import { ChartTabsPanel, createChartTab } from '@/ui/charts/components/ChartTabsPanel'
 import { TvlChart } from '@/ui/charts/tvl-chart/TvlChart'
 import { PageLayout } from '@/ui/layouts/PageLayout'
-import { CheckedAddress } from '@sparkdotfi/common-universal'
+import { CheckedAddress, NormalizedUnitNumber } from '@sparkdotfi/common-universal'
 import { InfoIcon } from 'lucide-react'
+import { SpkFarmActivePanel } from '../components/SpkFarmActivePanel'
 import { SpkFarmCtaPanel } from '../components/SpkFarmCtaPanel'
 import { SpkFarmTokensToDeposit } from '../components/SpkFarmTokensToDeposit'
 import { SpkFarmChartDetails } from '../logic/useSpkFarm'
@@ -20,12 +21,17 @@ export interface SpkFarmViewProps {
   farm: Farm
   tokensToDeposit: TokenWithBalance[]
   hasTokensToDeposit: boolean
+  isFarmActive: boolean
+  canClaim: boolean
   chartDetails: SpkFarmChartDetails
+  calculateReward: (timestampInMs: number) => NormalizedUnitNumber
+  refreshGrowingRewardIntervalInMs: number | undefined
   getBlockExplorerAddressLink: (address: CheckedAddress) => string | undefined
   openStakeDialog: (initialToken: Token) => void
   openDefaultedStakeDialog: () => void
+  openClaimDialog: () => void
+  openUnstakeDialog: () => void
   openConnectModal: () => void
-  openSandboxModal: () => void
 }
 
 export function SpkFarmView({
@@ -35,12 +41,17 @@ export function SpkFarmView({
   farm,
   tokensToDeposit,
   hasTokensToDeposit,
+  isFarmActive,
+  canClaim,
   chartDetails,
+  calculateReward,
+  refreshGrowingRewardIntervalInMs,
   getBlockExplorerAddressLink,
   openStakeDialog,
   openDefaultedStakeDialog,
+  openClaimDialog,
+  openUnstakeDialog,
   openConnectModal,
-  openSandboxModal,
 }: SpkFarmViewProps) {
   return (
     <PageLayout className="gap-5">
@@ -60,15 +71,27 @@ export function SpkFarmView({
       </div>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-        <SpkFarmCtaPanel
-          farm={farm}
-          walletConnected={walletConnected}
-          chainMismatch={chainMismatch}
-          hasTokensToDeposit={hasTokensToDeposit}
-          openConnectModal={openConnectModal}
-          openDepositDialog={openDefaultedStakeDialog}
-          openSandboxModal={openSandboxModal}
-        />
+        {isFarmActive ? (
+          <SpkFarmActivePanel
+            farm={farm}
+            canClaim={canClaim}
+            walletConnected={walletConnected}
+            chainMismatch={chainMismatch}
+            calculateReward={calculateReward}
+            refreshGrowingRewardIntervalInMs={refreshGrowingRewardIntervalInMs}
+            openClaimDialog={openClaimDialog}
+            openUnstakeDialog={openUnstakeDialog}
+          />
+        ) : (
+          <SpkFarmCtaPanel
+            farm={farm}
+            walletConnected={walletConnected}
+            chainMismatch={chainMismatch}
+            hasTokensToDeposit={hasTokensToDeposit}
+            openConnectModal={openConnectModal}
+            openDepositDialog={openDefaultedStakeDialog}
+          />
+        )}
 
         <ChartTabsPanel
           height={300}
@@ -109,6 +132,8 @@ export function SpkFarmView({
 
       <SpkFarmTokensToDeposit
         assets={tokensToDeposit}
+        walletConnected={walletConnected}
+        chainMismatch={chainMismatch}
         getBlockExplorerAddressLink={getBlockExplorerAddressLink}
         openStakeDialog={openStakeDialog}
       />

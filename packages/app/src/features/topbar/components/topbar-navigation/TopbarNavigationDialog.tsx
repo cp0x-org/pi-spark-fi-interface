@@ -128,16 +128,6 @@ export function TopbarNavigationDialog({
             </AccordionItem>
           </Accordion>
         )}
-
-        <div className="border-primary border-t" />
-
-        <TopbarButton
-          to={paths.farms}
-          type="farms"
-          label={LINKS_DATA.farms.label}
-          prefixIcon={LINKS_DATA.farms.icon}
-          onClick={closeDialog}
-        />
       </DialogContent>
     </Dialog>
   )

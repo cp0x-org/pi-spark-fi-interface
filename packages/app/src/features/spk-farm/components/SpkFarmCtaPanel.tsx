@@ -15,7 +15,6 @@ export interface SpkFarmCtaPanelProps {
   hasTokensToDeposit: boolean
   openConnectModal: () => void
   openDepositDialog: () => void
-  openSandboxModal: () => void
 }
 
 export function SpkFarmCtaPanel({
@@ -25,7 +24,6 @@ export function SpkFarmCtaPanel({
   hasTokensToDeposit,
   openConnectModal,
   openDepositDialog,
-  openSandboxModal,
 }: SpkFarmCtaPanelProps) {
   const depositDisabled = walletConnected && (!hasTokensToDeposit || chainMismatch)
   const apy = formatPercentage(farm.apy)
@@ -62,7 +60,7 @@ export function SpkFarmCtaPanel({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
           <Button
             size="l"
             disabled={depositDisabled}
@@ -70,9 +68,6 @@ export function SpkFarmCtaPanel({
             className="w-full"
           >
             {walletConnected ? 'Deposit' : 'Connect Wallet'}
-          </Button>
-          <Button size="l" variant="secondary" onClick={openSandboxModal} className="w-full bg-neutral-900">
-            Try in Sandbox
           </Button>
         </div>
       </div>

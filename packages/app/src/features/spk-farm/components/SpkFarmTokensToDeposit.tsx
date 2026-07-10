@@ -10,12 +10,16 @@ import { useMemo } from 'react'
 
 export interface SpkFarmTokensToDepositProps {
   assets: TokenWithBalance[]
+  walletConnected: boolean
+  chainMismatch: boolean
   getBlockExplorerAddressLink: (address: CheckedAddress) => string | undefined
   openStakeDialog: (token: Token) => void
 }
 
 export function SpkFarmTokensToDeposit({
   assets,
+  walletConnected,
+  chainMismatch,
   getBlockExplorerAddressLink,
   openStakeDialog,
 }: SpkFarmTokensToDepositProps) {
@@ -38,7 +42,12 @@ export function SpkFarmTokensToDeposit({
         header: '',
         renderCell: ({ token, balance }) => (
           <div className="flex w-full flex-row items-center justify-end gap-3">
-            <Button variant="tertiary" size="s" disabled={balance.eq(0)} onClick={() => openStakeDialog(token)}>
+            <Button
+              variant="tertiary"
+              size="s"
+              disabled={!walletConnected || chainMismatch || balance.eq(0)}
+              onClick={() => openStakeDialog(token)}
+            >
               Deposit
             </Button>
             <ViewContractMoreDropdown blockExplorerLink={getBlockExplorerAddressLink(token.address)} />
@@ -46,7 +55,7 @@ export function SpkFarmTokensToDeposit({
         ),
       },
     }),
-    [getBlockExplorerAddressLink, openStakeDialog],
+    [chainMismatch, getBlockExplorerAddressLink, openStakeDialog, walletConnected],
   )
 
   return (
