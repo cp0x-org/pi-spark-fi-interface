@@ -1,5 +1,6 @@
 import { http, Chain, Transport } from 'viem'
 import { arbitrum, base, gnosis, mainnet } from 'viem/chains'
+import { getRuntimeRpcUrl } from '../runtime/runtimeConfig'
 import { VIEM_TIMEOUT_ON_FORKS } from './config.e2e'
 import { getInjectedNetwork } from './getInjectedNetwork'
 
@@ -13,10 +14,10 @@ export type GetTransportsResult = Record<number, Transport>
 
 export function getTransports({ forkChain }: GetTransportsParamsOptions): GetTransportsResult {
   const transports: Record<number, Transport> = {
-    [mainnet.id]: http(`https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`),
-    [gnosis.id]: http(`https://gnosis-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`),
-    [base.id]: http(`https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`),
-    [arbitrum.id]: http(`https://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`),
+    [mainnet.id]: http(getRuntimeRpcUrl(mainnet.id) ?? `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`),
+    [gnosis.id]: http(getRuntimeRpcUrl(gnosis.id) ?? `https://gnosis-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`),
+    [base.id]: http(getRuntimeRpcUrl(base.id) ?? `https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`),
+    [arbitrum.id]: http(getRuntimeRpcUrl(arbitrum.id) ?? `https://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`),
   }
 
   if (forkChain) {

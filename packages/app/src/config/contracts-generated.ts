@@ -5512,7 +5512,7 @@ export const testSpkStakingAbi = [
  * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xA9147782Eb5732039b0Cf270e7B98f27b6ecd876)
  */
 export const testSpkStakingAddress = {
-  1: '0xA9147782Eb5732039b0Cf270e7B98f27b6ecd876',
+  1: '0xc6132FAF04627c8d05d6E759FAbB331Ef2D8F8fD',
 } as const
 
 /**

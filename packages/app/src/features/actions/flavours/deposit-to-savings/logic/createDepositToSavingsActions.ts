@@ -42,6 +42,9 @@ export function createDepositToSavingsActions(objective: DepositToSavingsObjecti
     case 'sexy-dai-to-sdai':
       return [depositAction]
 
+    case 'asset-to-spark-vault':
+      return [getApproveAction(objective.savingsToken.address), depositAction]
+
     case 'usdc-to-sdai':
       return [getApproveAction(getContractAddress(psmActionsConfig.address, chainId)), depositAction]
 

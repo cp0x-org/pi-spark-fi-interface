@@ -12,6 +12,7 @@ const meta: Meta<typeof GeneralStatsBar> = {
   args: {
     generalStats: {
       tvl: NormalizedUnitNumber(5_000_123_000),
+      totalStaked: NormalizedUnitNumber(628_900_000),
       apr: Percentage(0.1),
       stakers: 43_232,
     },

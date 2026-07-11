@@ -22,14 +22,32 @@ export function AccountsNavigation({
   variant,
   className,
 }: AccountsNavigationProps) {
+  const currentAccounts = accounts.filter((account) => !account.isLegacy)
+  const legacyAccounts = accounts.filter((account) => account.isLegacy)
+
   return (
     <div
       className={cn(accountsNavigationVariants({ variant }), className)}
       data-testid={testIds.savings.navigation.container}
     >
-      {accounts.map((account) => (
+      {currentAccounts.map((account) => (
         <NavigationItem
-          key={account.underlyingToken.symbol}
+          key={account.savingsToken.symbol}
+          active={account.savingsToken.symbol === selectedAccount}
+          onClick={() => setSelectedAccount(account.savingsToken.symbol)}
+          variant={variant}
+          {...account}
+        />
+      ))}
+      {legacyAccounts.length > 0 && (
+        <div className={cn(legacySeparatorVariants({ variant }))}>
+          <div className="typography-label-4 whitespace-nowrap text-secondary">Legacy</div>
+          <div className="h-px w-full bg-primary" />
+        </div>
+      )}
+      {legacyAccounts.map((account) => (
+        <NavigationItem
+          key={account.savingsToken.symbol}
           active={account.savingsToken.symbol === selectedAccount}
           onClick={() => setSelectedAccount(account.savingsToken.symbol)}
           variant={variant}
@@ -49,9 +67,19 @@ const accountsNavigationVariants = cva('', {
   },
 })
 
+const legacySeparatorVariants = cva('flex items-center gap-2', {
+  variants: {
+    variant: {
+      horizontal: 'mr-2 flex-col justify-center',
+      vertical: 'mb-2 flex-row',
+    },
+  },
+})
+
 interface AccountNavigationItemProps {
   underlyingToken: Token
   underlyingTokenDeposit: NormalizedUnitNumber
+  isLegacy: boolean
   active: boolean
   onClick: () => void
   variant: 'horizontal' | 'vertical'
@@ -60,6 +88,7 @@ interface AccountNavigationItemProps {
 function NavigationItem({
   underlyingToken,
   underlyingTokenDeposit,
+  isLegacy,
   active,
   onClick,
   variant,
@@ -72,6 +101,11 @@ function NavigationItem({
       className={cn(navigationItemButtonVariants({ variant, active }), transitionStyles)}
       data-testid={testIds.savings.navigation.item}
     >
+      {isLegacy && (
+        <div className="typography-label-4 absolute top-1 right-1 rounded-sm bg-secondary px-1 text-secondary">
+          Legacy
+        </div>
+      )}
       <TokenIcon
         token={underlyingToken}
         className={cn(navigationItemTokenIconVariants({ variant, active }), transitionStyles)}

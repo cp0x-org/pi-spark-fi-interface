@@ -2,6 +2,7 @@ import { getChainConfigEntry } from '@/config/chain'
 import { assert } from '@sparkdotfi/common-universal'
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { useCallback } from 'react'
+import { Address } from 'viem'
 import { useAccount, useConfig } from 'wagmi'
 import { useTokenRepositoryForFeature } from '../token-repository/useTokenRepositoryForFeature'
 import { farmsApiDetailsQueryOptions } from './farmApiDetailsQuery'
@@ -11,15 +12,17 @@ import { Farm, FarmApiDetails, FarmBlockchainDetails } from './types'
 
 export interface UseFarmsInfoParams {
   chainId: number
+  account?: Address
 }
 
 export interface UseFarmsInfoResult {
   farmsInfo: FarmsInfo
 }
 
-export function useFarmsInfo({ chainId }: UseFarmsInfoParams): UseFarmsInfoResult {
+export function useFarmsInfo({ chainId, account: accountOverride }: UseFarmsInfoParams): UseFarmsInfoResult {
   const wagmiConfig = useConfig()
-  const { address: account } = useAccount()
+  const { address: connectedAccount } = useAccount()
+  const account = accountOverride ?? connectedAccount
 
   const { farms } = getChainConfigEntry(chainId)
   const { tokenRepository } = useTokenRepositoryForFeature({ chainId, featureGroup: 'farms' })

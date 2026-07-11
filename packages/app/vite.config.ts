@@ -6,7 +6,17 @@ import svgr from 'vite-plugin-svgr'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'vitest/config'
 
-const buildSha = execSync('git rev-parse --short HEAD').toString().trimEnd()
+// Best-effort git sha. May be unavailable (e.g. building inside Docker where the
+// .git directory is not part of the build context) — fall back gracefully.
+const buildSha = (() => {
+  try {
+    return execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] })
+      .toString()
+      .trimEnd()
+  } catch {
+    return process.env.VITE_BUILD_SHA ?? 'unknown'
+  }
+})()
 const buildTime = new Date().toLocaleString('en-gb')
 
 // disable sentry integration on preview deployments
@@ -67,6 +77,11 @@ export default defineConfig({
         target: 'https://spark2-api.blockanalitica.com/api/v1/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/spark2-api/, ''),
+      },
+      '/spark-data-api': {
+        target: 'https://spark.data.blockanalitica.com/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/spark-data-api/, ''),
       },
     },
   },

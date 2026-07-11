@@ -130,6 +130,7 @@ interface ChartPanelProps extends ChartTab {
 
 function ChartPanel({ height, component: Chart, isError, isPending, props }: ChartPanelProps) {
   const [ref, { width }] = useElementSize()
+  const chartReady = width > 60
 
   if (isPending) {
     return (
@@ -153,7 +154,7 @@ function ChartPanel({ height, component: Chart, isError, isPending, props }: Cha
 
   return (
     <div ref={ref} className="w-full">
-      <Chart {...props} height={height} width={width} />
+      {chartReady ? <Chart {...props} height={height} width={width} /> : <div style={{ height }} />}
     </div>
   )
 }

@@ -1,5 +1,4 @@
 import { paths } from '@/config/paths'
-import { formatPercentage } from '@/domain/common/format'
 import { SavingsAPYBadge } from '@/features/savings/components/navbar-item/SavingsAPYBadge'
 import { assets } from '@/ui/assets'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/ui/atoms/accordion/Accordion'
@@ -17,13 +16,17 @@ import { LINKS_DATA } from './constants'
 
 export function TopbarNavigationDialog({
   savingsConverter,
-  spkStakingApy,
   blockedPages,
   borrowSubLinks,
   isBorrowSubLinkActive,
   isSparkTokenSubLinkActive,
 }: TopbarNavigationProps) {
   const [dialogOpen, setDialogOpen] = useState(false)
+  const sparkTokenSubLinks = [
+    { to: paths.spkStaking, label: 'Staking' },
+    { to: paths.spkFarm, label: 'Farm' },
+    { to: paths.spkGovernance, label: 'Governance' },
+  ]
 
   function closeDialog() {
     setDialogOpen(false)
@@ -108,21 +111,20 @@ export function TopbarNavigationDialog({
                 />
               </AccordionTrigger>
               <AccordionContent className="flex flex-col gap-2 px-12">
-                <NavLink to={paths.spkStaking}>
-                  {({ isActive }) => (
-                    <MenuItem
-                      onClick={closeDialog}
-                      className="overflow-hidden border border-primary p-0 text-secondary"
-                    >
-                      <SparkTokenNavLinkContent isActive={isActive}>
-                        <div className="typography-label-2 text-primary">Staking</div>
-                        <div className="typography-label-3 rounded-full bg-gradient-spark-primary-2 px-1.5 py-0.5 text-primary-inverse">
-                          {formatPercentage(spkStakingApy)}
-                        </div>
-                      </SparkTokenNavLinkContent>
-                    </MenuItem>
-                  )}
-                </NavLink>
+                {sparkTokenSubLinks.map((link) => (
+                  <NavLink key={link.to} to={link.to}>
+                    {({ isActive }) => (
+                      <MenuItem
+                        onClick={closeDialog}
+                        className="overflow-hidden border border-primary p-0 text-secondary"
+                      >
+                        <SparkTokenNavLinkContent isActive={isActive}>
+                          <div className="typography-label-2 text-primary">{link.label}</div>
+                        </SparkTokenNavLinkContent>
+                      </MenuItem>
+                    )}
+                  </NavLink>
+                ))}
               </AccordionContent>
             </AccordionItem>
           </Accordion>
@@ -130,13 +132,16 @@ export function TopbarNavigationDialog({
 
         <div className="border-primary border-t" />
 
-        <TopbarButton
-          to={paths.farms}
-          type="farms"
-          label={LINKS_DATA.farms.label}
-          prefixIcon={LINKS_DATA.farms.icon}
-          onClick={closeDialog}
-        />
+        {!blockedPages.some((page) => page === 'swap') && (
+          <TopbarButton
+            to={paths.swap}
+            label={LINKS_DATA.swap.label}
+            prefixIcon={LINKS_DATA.swap.icon}
+            type="swap"
+            className="w-full"
+            onClick={closeDialog}
+          />
+        )}
       </DialogContent>
     </Dialog>
   )

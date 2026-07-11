@@ -1,6 +1,7 @@
 import { getChainConfigEntry } from '@/config/chain'
 import { TokenConfig } from '@/config/chain/types'
 import { useSuspenseQueries } from '@tanstack/react-query'
+import { Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
 import { TokenRepository } from './TokenRepository'
 import { tokenDataQueryOptions } from './tokenDataQuery'
@@ -8,6 +9,7 @@ import { tokenDataQueryOptions } from './tokenDataQuery'
 export interface UseTokenRepositoryParams {
   tokenConfigs: TokenConfig[]
   chainId?: number
+  account?: Address
 }
 
 export interface UseTokenRepositoryResult {
@@ -16,14 +18,14 @@ export interface UseTokenRepositoryResult {
 
 export function useTokenRepository(params: UseTokenRepositoryParams): UseTokenRepositoryResult {
   const wagmiConfig = useConfig()
-  const { address } = useAccount()
+  const { address: connectedAccount } = useAccount()
   const _chainId = useChainId()
-  const { tokenConfigs, chainId = _chainId } = params
+  const { tokenConfigs, chainId = _chainId, account = connectedAccount } = params
   const chainConfig = getChainConfigEntry(chainId)
 
   const response = useSuspenseQueries({
     queries: tokenConfigs.map((tokenConfig) =>
-      tokenDataQueryOptions({ tokenConfig, wagmiConfig, chainId, account: address }),
+      tokenDataQueryOptions({ tokenConfig, wagmiConfig, chainId, account }),
     ),
   })
 

@@ -7,13 +7,13 @@ import { StakingRewardsPanelProps } from './components/staking-rewards-panel/Sta
 export interface GeneralStats {
   stakers: number
   tvl: NormalizedUnitNumber
+  totalStaked: NormalizedUnitNumber
   apr: Percentage
 }
 
 export interface SparkStakingHistoryItem {
   date: Date
-  apy: Percentage
-  tvl: NormalizedUnitNumber
+  totalStaked: NormalizedUnitNumber
 }
 
 export type SparkStakingHistoryQueryResult = UseQueryResult<SparkStakingHistoryItem[]>

@@ -80,6 +80,7 @@ export interface AccountConfig {
   fetchConverterQuery: (args: SavingsConverterQueryParams) => SavingsConverterQueryOptions
   savingsRateQueryOptions: SavingsRateQueryOptions | undefined
   myEarningsQueryOptions: MyEarningsQueryOptions | undefined
+  isLegacy?: boolean
 }
 
 export interface SavingsConfig {
@@ -90,12 +91,12 @@ export interface SavingsConfig {
 export type AssetsGroup =
   | {
       type: 'stablecoins'
-      name: 'Stablecoins'
+      name: string
       assets: TokenSymbol[]
     }
   | {
       type: 'governance'
-      name: 'Governance Tokens'
+      name: string
       assets: TokenSymbol[]
     }
 
@@ -103,6 +104,7 @@ export type FarmConfig = {
   address: CheckedAddress
   entryAssetsGroup: AssetsGroup
   historyCutoff?: Date
+  hiddenFromList?: boolean
 } & (
   | {
       rewardType: 'token'
@@ -144,17 +146,36 @@ export interface ChainConfigEntry {
 export type ChainConfig = Record<SupportedChainId, ChainConfigEntry>
 
 // @note: zero-price oracle is used for tokens for which we don't have a price feed yet
-export type OracleType = 'fixed-usd' | 'vault' | 'zero-price' | 'ssr-auth-oracle'
+export type OracleType =
+  | 'fixed-usd'
+  | 'vault'
+  | 'zero-price'
+  | 'ssr-auth-oracle'
+  | 'chainlink-usd'
+  | 'farm-reward-price'
 
 export type TokenConfig = { symbol: TokenSymbol } & (
   | {
       address: CheckedAddress
-      oracleType: Exclude<OracleType, 'vault'>
+      oracleType: Exclude<OracleType, 'vault' | 'chainlink-usd' | 'farm-reward-price'>
     }
   | {
       address: CheckedAddress
       oracleType: 'vault'
       sharesDecimals?: number
       assetsDecimals?: number
+      // @note: chainlink USD feed for the vault underlying asset; without it the underlying is assumed to be worth $1
+      underlyingPriceFeed?: CheckedAddress
+    }
+  | {
+      address: CheckedAddress
+      oracleType: 'chainlink-usd'
+      priceFeed: CheckedAddress
+    }
+  | {
+      // @note: price of a farm reward token taken from the info-sky farms api
+      address: CheckedAddress
+      oracleType: 'farm-reward-price'
+      farmAddress: CheckedAddress
     }
 )

@@ -10,13 +10,13 @@ import withdraw from './actions/withdraw.svg'
 import arrowRight from './arrow-right.svg'
 import mkrToSkyTransform from './banners/mkr-to-sky-transform.svg'
 import boxArrowTopRight from './box-arrow-top-right.svg'
+import cp0xLogo from './brand/cp0x_logo.svg'
 import logoDark from './brand/logo-dark.svg'
 import logoGradientDark from './brand/logo-gradient-dark.svg'
 import logoGradientLight from './brand/logo-gradient-light.svg'
 import logoLight from './brand/logo-light.svg'
 import symbolDark from './brand/symbol-dark.svg'
 import symbolGradient from './brand/symbol-gradient.svg'
-import cp0xLogo from './brand/cp0x_logo.svg'
 import symboLight from './brand/symbol-light.svg'
 import arbitrum from './chains/arbitrum.svg'
 import base from './chains/base.svg'
@@ -87,12 +87,17 @@ import ezeth from './tokens/ezeth.svg'
 import gno from './tokens/gno.svg'
 import lbtc from './tokens/lbtc.svg'
 import mkr from './tokens/mkr.svg'
+import pyusd from './tokens/pyusd.svg'
 import red from './tokens/red.svg'
 import reth from './tokens/reth.svg'
 import rseth from './tokens/rseth.svg'
 import sdai from './tokens/sdai.svg'
 import sky from './tokens/sky.svg'
+import speth from './tokens/speth.svg'
 import spk from './tokens/spk.svg'
+import sppyusd from './tokens/sppyusd.svg'
+import spusdc from './tokens/spusdc.svg'
+import spusdt from './tokens/spusdt.svg'
 import steth from './tokens/steth.svg'
 import susdc from './tokens/susdc.svg'
 import susds from './tokens/susds.svg'
@@ -201,6 +206,11 @@ export const assets = {
     susdc,
     'usdc.e': usdc,
     usdt,
+    pyusd,
+    spusdc,
+    spusdt,
+    sppyusd,
+    speth,
     wbtc,
     weeth,
     weth,

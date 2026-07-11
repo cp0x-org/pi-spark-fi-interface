@@ -1,3 +1,4 @@
+import { isSparkVaultPair } from '@/config/chain/constants'
 import { TokenRepository } from '@/domain/token-repository/TokenRepository'
 import { Token } from '@/domain/types/Token'
 import { TokenSymbol } from '@/domain/types/TokenSymbol'
@@ -12,6 +13,7 @@ export interface GetSavingsWithdrawActionPathParams {
 }
 
 export type SavingsWithdrawActionPath =
+  | 'spark-vault-to-asset'
   | 'susds-to-usds'
   | 'susds-to-usdc'
   | 'susdc-to-usdc'
@@ -38,6 +40,10 @@ export function getSavingsWithdrawActionPath({
   const susds = tokenRepository.sUSDS?.symbol
   const usdc = TokenSymbol('USDC')
   const susdc = TokenSymbol('sUSDC')
+
+  if (isSparkVaultPair({ tokenSymbol: token.symbol, savingsTokenSymbol: savingsToken.symbol })) {
+    return 'spark-vault-to-asset'
+  }
 
   if (token.symbol === dai && savingsToken.symbol === sdai && chainId === gnosis.id) {
     return 'sdai-to-sexy-dai'

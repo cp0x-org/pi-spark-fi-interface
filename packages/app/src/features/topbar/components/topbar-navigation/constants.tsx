@@ -1,4 +1,5 @@
 import { assets } from '@/ui/assets'
+import { ArrowRightLeftIcon } from 'lucide-react'
 
 export const LINKS_DATA = {
   savings: {
@@ -13,8 +14,12 @@ export const LINKS_DATA = {
     label: 'Borrow',
     icon: <img src={assets.page.borrow} alt="Borrow icon" className="h-5 w-5" />,
   },
+  swap: {
+    label: 'Swap',
+    icon: <ArrowRightLeftIcon className="h-5 w-5 text-[#FA43BD]" />,
+  },
   sparkToken: {
-    label: 'SPK Token',
+    label: 'SPK',
     icon: <img src={assets.token.spk} alt="Spark token icon" className="h-5 w-5" />,
   },
 }

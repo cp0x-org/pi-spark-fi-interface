@@ -1,4 +1,4 @@
-import { infoSkyApiUrl, spark2ApiUrl } from '@/config/consts'
+import { spark2ApiUrl } from '@/config/consts'
 import {
   testSpkStakingAbi,
   testSpkStakingAddress,
@@ -18,7 +18,7 @@ import { useSpkStaking } from './useSpkStaking'
 
 const chainId = mainnet.id
 const usds = CheckedAddress('0xdC035D45d973E3EC169d2276DDab16f1e407384F')
-const spk = CheckedAddress('0xf94473bf6ef648638a7b1eeef354fe440721ef41')
+const spk = CheckedAddress('0xc20059e0317DE91738d13af027DfC4a50781b066')
 const account = testAddresses.alice
 const merkleRoot = Hex.random()
 
@@ -38,19 +38,20 @@ describe(useSpkStaking.name, () => {
 
   test('returns the chainId', async () => {
     vi.stubGlobal('fetch', async (...args: Parameters<typeof fetch>) => {
-      if (args[0] === `${infoSkyApiUrl}/spk-staking/stats/`) {
+      if (args[0] === `${spark2ApiUrl}/spk-staking/stats/`) {
         return Promise.resolve({
           ok: true,
           json: () =>
             Promise.resolve({
               tvl: '1000000',
+              total_staked: '900000',
               number_of_wallets: 100,
               apr: '0.1',
             }),
         })
       }
 
-      if (args[0] === `${spark2ApiUrl}/spk-staking/${chainId}/${merkleRoot}/${account}/`) {
+      if (args[0] === `${spark2ApiUrl}/spk-staking/${account}/?season=4`) {
         return Promise.resolve({
           ok: true,
           json: () =>
@@ -237,21 +238,22 @@ describe(useSpkStaking.name, () => {
       expect(result.current.chainId).toBe(chainId)
       expect(result.current.generalStats).toMatchObject({
         tvl: NormalizedUnitNumber(1000000),
+        totalStaked: NormalizedUnitNumber(900000),
         stakers: 100,
         apr: Percentage(0.1),
       })
       expect(result.current.mainPanelData).toMatchObject({
         type: 'active',
         props: {
-          apy: Percentage(0.1),
+          stakingMultiplier: NormalizedUnitNumber(3),
           stakedAmount: NormalizedUnitNumber(10),
           rewardToken: expect.objectContaining({
-            symbol: 'SPK',
-            address: spk,
-          }),
-          stakingToken: expect.objectContaining({
             symbol: 'USDS',
             address: usds,
+          }),
+          stakingToken: expect.objectContaining({
+            symbol: 'SPK',
+            address: spk,
           }),
           claimableRewards: NormalizedUnitNumber(1),
           calculateReward: expect.any(Function),

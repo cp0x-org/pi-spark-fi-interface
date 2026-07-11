@@ -43,6 +43,10 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Runtime configuration (RPC URLs, ...). Loaded before the app bundle so it can be
+         overridden per-deployment (e.g. mounted via docker-compose) without rebuilding.
+         Optional: if absent, the app falls back to its built-in defaults. -->
+    <script src="/config.js"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

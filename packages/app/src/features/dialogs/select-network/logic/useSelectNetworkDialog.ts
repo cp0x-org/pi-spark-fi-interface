@@ -61,6 +61,7 @@ function formatSupportedPages(supportedPages: Path[]): string[] {
 const pageGroupToName: Record<PathGroup, string> = {
   borrow: 'Borrow',
   savings: 'Savings',
+  swap: 'Swap',
   farms: 'Farms',
   sparkRewards: 'Rewards',
   sparkToken: 'Spark Token',

@@ -24,16 +24,19 @@ function InteractiveNavigation({ variant }: { variant: 'vertical' | 'horizontal'
       underlyingToken: tokens.USDS,
       savingsToken: tokens.sUSDS,
       underlyingTokenDeposit: NormalizedUnitNumber(1_000_000_000),
+      isLegacy: false,
     },
     {
       underlyingToken: tokens.USDC,
       savingsToken: tokens.sUSDC,
       underlyingTokenDeposit: NormalizedUnitNumber(0),
+      isLegacy: true,
     },
     {
       underlyingToken: tokens.DAI,
       savingsToken: tokens.sDAI,
       underlyingTokenDeposit: NormalizedUnitNumber(200_000),
+      isLegacy: true,
     },
   ]
 

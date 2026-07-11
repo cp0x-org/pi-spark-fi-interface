@@ -11,6 +11,8 @@ const STEP_IN_MS = 50
 
 export interface GrowingRewardProps {
   rewardToken: Token
+  // @note: overrides the reward token icon (e.g. for off-chain rewards like Spark Points)
+  iconSrc?: string
   calculateReward: (timestampInMs: number) => NormalizedUnitNumber
   refreshIntervalInMs: number | undefined
   wholePartTextBgGradientClass: string
@@ -20,6 +22,7 @@ export interface GrowingRewardProps {
 
 export function GrowingReward({
   rewardToken,
+  iconSrc,
   calculateReward,
   refreshIntervalInMs,
   wholePartTextBgGradientClass,
@@ -43,7 +46,7 @@ export function GrowingReward({
 
   return (
     <div className="isolate grid grid-cols-[auto_1fr] items-center gap-x-2 lg:gap-x-4 lg:gap-y-2">
-      <img src={getTokenImage(rewardToken.symbol)} className="h-8 shrink-0 lg:h-12 xl:h-14" />
+      <img src={iconSrc ?? getTokenImage(rewardToken.symbol)} className="h-8 shrink-0 lg:h-12 xl:h-14" />
       <div className="flex items-baseline tabular-nums" data-testid={testIds.farmDetails.activeFarmInfoPanel.rewards}>
         <div
           className={cn(

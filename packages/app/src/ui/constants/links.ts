@@ -21,8 +21,13 @@ export const links = {
       gnosisSdai: 'https://docs.spark.fi/user-guides/earning-savings/sdai#savings-xdai-on-gnosis-chain',
     },
     sparkRewards: 'https://docs.spark.fi/rewards',
+    governance: 'https://docs.spark.fi/governance',
     // @todo: spk staking - replace with proper docs link
     spkStaking: 'https://docs.spark.fi/spk-staking',
+  },
+  snapshot: {
+    sparkSpace: 'https://snapshot.box/#/s:sparkfi.eth',
+    proposals: 'https://snapshot.box/#/s:sparkfi.eth/proposals',
   },
   aaveTechnicalPaper: 'https://github.com/aave/aave-v3-core/blob/master/techpaper/Aave_V3_Technical_Paper.pdf',
   termsOfUse: 'https://spark.fi/terms-of-use',

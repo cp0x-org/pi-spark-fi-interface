@@ -56,7 +56,7 @@ export function getDefaultAppConfig(): AppConfig {
           ...(import.meta.env.MODE === 'development' || import.meta.env.MODE === 'staging'
             ? {
                 SPK: {
-                  address: '0xf94473bf6ef648638a7b1eeef354fe440721ef41',
+                  address: '0xc20059e0317DE91738d13af027DfC4a50781b066',
                   decimals: 18,
                 },
               }

@@ -29,6 +29,10 @@ const buttonVariants = cva(
           'hover:border-page-spark-token/40 active:border-page-spark-token',
           'hover:shadow-page-spark-token/15 focus-visible:ring-page-spark-token',
         ),
+        swap: cn(
+          'hover:border-page-spark-token/40 active:border-page-spark-token',
+          'hover:shadow-page-spark-token/15 focus-visible:ring-page-spark-token',
+        ),
       },
       isActive: {
         false: '',
@@ -42,11 +46,13 @@ const buttonVariants = cva(
       { type: 'farms', isHighlighted: true, class: 'border-page-farms/40 shadow-page-farms/15' },
       { type: 'borrow', isHighlighted: true, class: 'border-page-borrow/40 shadow-page-borrow/15' },
       { type: 'sparkToken', isHighlighted: true, class: 'border-page-spark-token/40 shadow-page-spark-token/15' },
+      { type: 'swap', isHighlighted: true, class: 'border-page-spark-token/40 shadow-page-spark-token/15' },
       // @note overrides didn't work without important flag
       { type: 'savings', isActive: true, class: '!border-page-savings' },
       { type: 'farms', isActive: true, class: '!border-page-farms' },
       { type: 'borrow', isActive: true, class: '!border-page-borrow' },
       { type: 'sparkToken', isActive: true, class: '!border-page-spark-token' },
+      { type: 'swap', isActive: true, class: '!border-page-spark-token' },
     ],
     defaultVariants: {
       isActive: false,
@@ -73,7 +79,7 @@ export const TopbarButton = forwardRef<HTMLAnchorElement | HTMLButtonElement, To
   ({ postfixSlot, prefixIcon, className: _className, label, to, type, active, highlighted, onClick, ...rest }, ref) => {
     const isActive = !!useMatch(`${to}/*`) || active
 
-    const className = buttonVariants({ type, isActive, isHighlighted: highlighted })
+    const className = cn(buttonVariants({ type, isActive, isHighlighted: highlighted }), _className)
 
     const content = (
       <>

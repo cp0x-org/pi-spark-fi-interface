@@ -58,6 +58,7 @@ export function createWithdrawFromSavingsActions(
   })
 
   switch (actionPath) {
+    case 'spark-vault-to-asset':
     case 'susds-to-usds':
     case 'sdai-to-dai':
     case 'susdc-to-usdc':

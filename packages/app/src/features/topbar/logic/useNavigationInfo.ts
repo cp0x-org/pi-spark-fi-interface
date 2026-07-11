@@ -1,7 +1,6 @@
 import { getChainConfigEntry } from '@/config/chain'
 import { paths } from '@/config/paths'
 import { useBlockedPages } from '@/features/compliance/logic/useBlockedPages'
-import { Percentage } from '@sparkdotfi/common-universal'
 import { matchPath, useLocation } from 'react-router-dom'
 import { TopbarNavigationProps } from '../components/topbar-navigation/TopbarNavigation'
 import { useSavingsConverter } from './useSavingsConverter'
@@ -36,7 +35,7 @@ export function useNavigationInfo({ chainId }: UseNavigationInfoParams): TopbarN
     },
   ]
 
-  const sparkTokenSubLinks = [paths.spkStaking]
+  const sparkTokenSubLinks = [paths.spkStaking, paths.spkFarm, paths.spkGovernance]
 
   const location = useLocation()
   const isBorrowSubLinkActive = borrowSubLinks.some((link) => matchPath(`${link.to}/*`, location.pathname))
@@ -44,8 +43,6 @@ export function useNavigationInfo({ chainId }: UseNavigationInfoParams): TopbarN
 
   return {
     savingsConverter,
-    // @todo: spk staking - replace with actual apy
-    spkStakingApy: Percentage(0.172),
     blockedPages,
     borrowSubLinks,
     isBorrowSubLinkActive,

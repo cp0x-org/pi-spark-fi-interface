@@ -1,12 +1,11 @@
-import { formatPercentage } from '@/domain/common/format'
 import { Token } from '@/domain/types/Token'
-import { getTokenImage } from '@/ui/assets'
+import { assets, getTokenImage } from '@/ui/assets'
 import { Button } from '@/ui/atoms/button/Button'
 import { Panel } from '@/ui/atoms/panel/Panel'
 import { GrowingReward } from '@/ui/molecules/growing-reward/GrowingReward'
 import { Info } from '@/ui/molecules/info/Info'
 import { cn } from '@/ui/utils/style'
-import { NormalizedUnitNumber, Percentage } from '@sparkdotfi/common-universal'
+import { NormalizedUnitNumber } from '@sparkdotfi/common-universal'
 import { ReactNode } from 'react'
 
 export interface StakingRewardsPanelProps {
@@ -20,7 +19,7 @@ export interface StakingRewardsPanelProps {
   openClaimDialog: () => void
   openUnstakeDialog: () => void
   openStakeDialog: () => void
-  apy: Percentage
+  stakingMultiplier: NormalizedUnitNumber
   className?: string
 }
 
@@ -35,7 +34,7 @@ export function StakingRewardsPanel({
   openClaimDialog,
   openUnstakeDialog,
   openStakeDialog,
-  apy,
+  stakingMultiplier,
   className,
 }: StakingRewardsPanelProps) {
   return (
@@ -50,17 +49,17 @@ export function StakingRewardsPanel({
     >
       <div className="flex w-full flex-row items-center justify-between">
         <div className="typography-heading-4 flex items-baseline gap-1 text-primary-inverse">
-          {/* @todo: spk staking - ask for a tooltip text */}
-          My Rewards <Info className="icon-secondary">Staking rewards panel tooltip text</Info>
+          My Spark Points{' '}
+          <Info className="icon-secondary">
+            Spark Points accrued for staking SPK. Points are tracked off-chain and are not claimable as tokens.
+          </Info>
         </div>
-        <div className="grid grid-cols-[80px_80px] gap-1">
-          <Button
-            onClick={openClaimDialog}
-            variant={stakedAmount.gt(0) && claimableRewards.gt(0) ? 'primary' : 'secondary'}
-            size="s"
-          >
-            Claim
-          </Button>
+        <div className={cn('grid gap-1', claimableRewards.gt(0) ? 'grid-cols-[80px_80px]' : 'grid-cols-[80px]')}>
+          {claimableRewards.gt(0) && (
+            <Button onClick={openClaimDialog} variant={stakedAmount.gt(0) ? 'primary' : 'secondary'} size="s">
+              Claim
+            </Button>
+          )}
           <Button
             onClick={stakedAmount.gt(0) ? openUnstakeDialog : openStakeDialog}
             variant={stakedAmount.gt(0) ? 'secondary' : 'primary'}
@@ -72,6 +71,7 @@ export function StakingRewardsPanel({
       </div>
       <GrowingReward
         rewardToken={rewardToken}
+        iconSrc={assets.sparkIcon}
         calculateReward={calculateReward}
         refreshIntervalInMs={refreshGrowingRewardIntervalInMs}
         isOutOfSync={isRewardOutOfSync}
@@ -81,26 +81,32 @@ export function StakingRewardsPanel({
         fractionalPartTextColorClass="text-[#FFAD48]"
       />
       <div className="flex divide-x divide-fg-secondary">
-        <DetailsItem label="My Stake" tooltip="My stake tooltip text">
+        <DetailsItem label="My Stake" tooltip="The amount of SPK you have staked.">
           <div className="typography-label-1 flex items-center gap-1.5 text-primary-inverse">
             <img src={getTokenImage(stakingToken.symbol)} className="h-4" alt={stakingToken.symbol} />
             {stakingToken.format(stakedAmount, { style: 'auto' })}
           </div>
         </DetailsItem>
-        <DetailsItem label="APY" tooltip="APY tooltip text">
+        <DetailsItem label="Multiplier" tooltip="Spark Points multiplier applied to your staked SPK.">
           <div className="typography-label-1 bg-gradient-spark-primary-2 bg-clip-text text-transparent">
-            {formatPercentage(apy, { minimumFractionDigits: 0 })}
+            {formatMultiplier(stakingMultiplier)}x
           </div>
         </DetailsItem>
-        <DetailsItem label="Available to claim" tooltip="Available to claim tooltip text">
-          <div className="typography-label-1 flex items-center gap-1.5 text-primary-inverse">
-            <img src={getTokenImage(rewardToken.symbol)} className="h-4" alt={rewardToken.symbol} />
-            {rewardToken.format(claimableRewards, { style: 'auto' })}
-          </div>
-        </DetailsItem>
+        {claimableRewards.gt(0) && (
+          <DetailsItem label="Available to claim" tooltip="Rewards that can be claimed now.">
+            <div className="typography-label-1 flex items-center gap-1.5 text-primary-inverse">
+              <img src={getTokenImage(rewardToken.symbol)} className="h-4" alt={rewardToken.symbol} />
+              {rewardToken.format(claimableRewards, { style: 'auto' })}
+            </div>
+          </DetailsItem>
+        )}
       </div>
     </Panel>
   )
+}
+
+function formatMultiplier(multiplier: NormalizedUnitNumber): string {
+  return Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(multiplier.toNumber())
 }
 
 function DetailsItem({ label, tooltip, children }: { label: string; tooltip: string; children: ReactNode }) {
